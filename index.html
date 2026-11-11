@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PSPO">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#5340d6">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<title>PSPO Practice Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f1ff;--surface:#ffffff;--surface2:#ebe7ff;--ink:#1c1840;--muted:#625d86;--line:#dcd6f5;
+  --brand:#5340d6;--brand-ink:#ffffff;--sun:#ffc83d;--sun-ink:#3a2a00;
+  --good:#0f8a62;--good-bg:#dcf5ea;--warn:#b45f06;--warn-bg:#fff0d6;--shadow:0 8px 24px rgba(52,36,140,.12);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#13112b;--surface:#1d1a40;--surface2:#2b2760;--ink:#f1eeff;--muted:#aaa4d6;--line:#38336f;
+    --brand:#9a8fff;--brand-ink:#13112b;--sun:#ffd24f;--sun-ink:#3a2a00;
+    --good:#4fe0a8;--good-bg:#10382c;--warn:#ffb85c;--warn-bg:#3b2a10;--shadow:0 8px 24px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#13112b;--surface:#1d1a40;--surface2:#2b2760;--ink:#f1eeff;--muted:#aaa4d6;--line:#38336f;
+  --brand:#9a8fff;--brand-ink:#13112b;--sun:#ffd24f;--sun-ink:#3a2a00;
+  --good:#4fe0a8;--good-bg:#10382c;--warn:#ffb85c;--warn-bg:#3b2a10;--shadow:0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 'Nunito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+h1,h2,h3{font-family:'Fredoka','Nunito',system-ui,sans-serif;margin:0;font-weight:600;line-height:1.15}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+#app{max-width:640px;margin:0 auto;padding:0 16px 40px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--bg);display:flex;align-items:center;gap:12px;padding:12px 0}
+.top h1{font-size:22px;flex:1}
+.iconbtn{width:44px;height:44px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none}
+.card{background:var(--surface);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.card h2{font-size:19px;margin-bottom:10px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.btn{display:block;width:100%;min-height:54px;border-radius:18px;padding:12px 18px;font-weight:800;font-size:17px;background:var(--brand);color:var(--brand-ink);text-align:center;transition:transform .12s}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.alt{background:var(--surface2);color:var(--ink)}
+.btn.sun{background:var(--sun);color:var(--sun-ink)}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.hero{padding:6px 0 18px}
+.hero h2{font-size:34px;letter-spacing:-.01em}
+.hero p{margin:8px 0 0;color:var(--muted);max-width:34ch}
+.levels{display:flex;gap:8px;flex-wrap:wrap}
+.lvl{padding:10px 16px;border-radius:999px;background:var(--surface2);font-weight:800;min-height:44px}
+.lvl[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.lvl[disabled]{opacity:.55;cursor:default}
+.lvl small{font-weight:700;opacity:.85;margin-left:4px}
+.sliderbox{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+.sliderbox b{font-family:'Fredoka',sans-serif;font-size:34px;color:var(--brand)}
+input[type=range]{width:100%;height:44px;accent-color:var(--brand);margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--surface);border-radius:18px;padding:10px 6px;text-align:center;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:'Fredoka',sans-serif;font-size:22px}
+.stat span{font-size:12px;color:var(--muted)}
+.trow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.trow:first-of-type{border-top:0}
+.trow .em{font-size:22px;width:30px;text-align:center}
+.trow .nm{flex:1;min-width:0;font-weight:700;font-size:15px;line-height:1.25}
+.meter{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:5px}
+.meter i{display:block;height:100%;background:var(--good);border-radius:99px}
+.heat{font-size:20px;width:28px;text-align:center}
+.shelf{display:flex;flex-wrap:wrap;gap:4px;font-size:24px}
+.resume{background:var(--sun);color:var(--sun-ink)}
+.resume .btn{background:var(--sun-ink);color:var(--sun);margin-top:10px}
+.foot{font-size:13px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.45}
+
+/* quiz */
+.bar{flex:1;height:12px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--sun));border-radius:99px;transition:width .35s}
+.meta{font-weight:800;min-width:64px;text-align:right;font-size:15px;white-space:nowrap}
+.chip{display:inline-block;padding:4px 12px;border-radius:99px;background:var(--surface2);font-size:13px;font-weight:700;margin-bottom:12px}
+.qtext{font-family:'Fredoka',sans-serif;font-size:21px;line-height:1.3;font-weight:500;margin:0 0 16px}
+.creature{display:flex;align-items:center;gap:12px;background:var(--warn-bg);border-radius:16px;padding:10px 12px;margin-bottom:14px}
+.creature .cr{font-size:34px;animation:wob 2.2s ease-in-out infinite}
+.creature b{display:block;font-size:14px}
+.creature span{font-size:13px;color:var(--muted)}
+.dots{letter-spacing:3px;color:var(--brand);font-weight:800}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;min-height:56px;padding:13px 14px;border-radius:16px;border:2px solid var(--line);background:var(--surface);font-weight:600;line-height:1.35;transition:border-color .15s,background .15s}
+.opt .mk{flex:none;width:26px;height:26px;border:2px solid var(--line);display:grid;place-items:center;font-size:15px;font-weight:800;margin-top:-1px;background:var(--bg)}
+.opt .mk.r{border-radius:50%}.opt .mk.c{border-radius:8px}
+.opt.sel{border-color:var(--brand);background:var(--surface2)}
+.opt.sel .mk{border-color:var(--brand);background:var(--brand);color:var(--brand-ink)}
+.opt.ok{border-color:var(--good);background:var(--good-bg)}
+.opt.ok .mk{border-color:var(--good);background:var(--good);color:var(--bg)}
+.opt.miss{border-color:var(--warn);background:var(--warn-bg)}
+.opt.miss .mk{border-color:var(--warn);background:var(--warn);color:var(--bg)}
+.opt.dim{opacity:.6}
+.fb{margin-top:16px;border-radius:18px;padding:14px 16px;animation:rise .3s ease-out}
+.fb.good{background:var(--good-bg)}.fb.warn{background:var(--warn-bg)}
+.fb h3{font-size:18px;margin-bottom:4px}
+.fb p{margin:4px 0 0}
+.fb .ev{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-weight:700}
+.act{margin-top:16px}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:800;z-index:60;animation:rise .25s ease-out;box-shadow:var(--shadow)}
+
+/* summary */
+.sum{text-align:center;padding:8px 0}
+.ringwrap{position:relative;width:200px;height:200px;margin:8px auto}
+.ring{width:100%;height:100%}
+.ring .trk{fill:none;stroke:var(--surface2);stroke-width:12}
+.ring .prg{fill:none;stroke:var(--brand);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+.ring .pass{stroke:var(--sun);stroke-width:5;stroke-linecap:round}
+.ringtxt{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ringtxt b{font-family:'Fredoka',sans-serif;font-size:46px;line-height:1}
+.ringtxt span{color:var(--muted);font-weight:700}
+.trophy{font-size:56px;animation:bounce .8s cubic-bezier(.3,1.6,.5,1) both}
+.verdict{font-size:30px;margin:6px 0 4px}
+.tag{display:inline-block;background:var(--surface2);border-radius:99px;padding:3px 12px;font-size:13px;font-weight:700;color:var(--muted)}
+.parade{position:relative;height:48px;overflow:hidden;margin:6px 0 2px}
+.parade div{position:absolute;white-space:nowrap;font-size:32px;animation:march 7s linear 1 both}
+.brow{padding:8px 0}
+.brow .hd{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:15px}
+.brow .hd span:last-child{white-space:nowrap}
+.pbar{position:relative;height:12px;background:var(--surface2);border-radius:99px;margin-top:6px}
+.pbar i{display:block;height:100%;border-radius:99px;background:var(--warn)}
+.pbar i.p{background:var(--good)}
+.pbar u{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--sun);border-radius:2px}
+.focus{background:var(--warn-bg)}
+.focus li{margin:8px 0}
+ul.plain{margin:0;padding:0;list-style:none}
+details{margin-top:8px}
+summary{cursor:pointer;font-weight:800;padding:8px 0;min-height:44px;display:flex;align-items:center}
+.miss-i{padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.miss-i b{display:block;margin-bottom:2px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,8,30,.55);z-index:70;display:flex;align-items:flex-end;justify-content:center}
+.panel{background:var(--surface);width:100%;max-width:640px;border-radius:26px 26px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto;animation:rise .25s ease-out}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;min-height:44px;border-radius:12px;background:var(--surface2);font-weight:800}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.srow{margin:16px 0}
+.srow>b{display:block;margin-bottom:8px}
+
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:80}
+.confetti span{position:absolute;top:-8vh;animation:fall linear forwards;will-change:transform}
+
+.hearts{font-size:18px;letter-spacing:2px;white-space:nowrap;min-width:78px}
+.ready{display:flex;gap:14px;align-items:center}
+.ready .big{font-family:'Fredoka',sans-serif;font-size:46px;line-height:1;color:var(--brand)}
+.ready .lab{font-weight:800}
+.meter.big{height:12px}
+.twist{background:var(--surface2);border-radius:16px;padding:8px 12px;margin-bottom:14px;font-weight:700;font-size:14px}
+.nav{display:flex;gap:10px;margin-top:16px}
+.nav .btn{min-height:50px}
+.flagbtn{min-height:44px;padding:8px 14px;border-radius:14px;background:var(--surface2);font-weight:800}
+.flagbtn[aria-pressed="true"]{background:var(--sun);color:var(--sun-ink)}
+.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:12px 0}
+.gq{aspect-ratio:1;border-radius:10px;border:2px solid var(--line);font-weight:800;font-size:14px;position:relative;background:var(--surface);min-width:0}
+.gq.a{background:var(--surface2);border-color:var(--brand)}
+.gq.cur{outline:3px solid var(--sun)}
+.gq.f::after{content:"🚩";position:absolute;top:-7px;right:-5px;font-size:12px}
+.cheat li{margin:6px 0}
+.qtext b{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
+.mini{width:40px;height:40px;border-radius:12px;background:var(--surface2);font-size:18px;display:grid;place-items:center;flex:none}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes wob{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes bounce{0%{transform:scale(0) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes fall{to{transform:translate3d(var(--dx),115vh,0) rotate(var(--rot))}}
+@keyframes march{from{left:-100%}to{left:100%}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .parade div{position:static}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- storage ---------- */
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+  del(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+const K={prog:'pspo1.prog',round:'pspo1.round',set:'pspo1.settings'};
+
+/* ---------- content ---------- */
+const THEMES=[
+ {n:'Product Owner role & the eight stances',e:'🎭',r:'The Professional Product Owner (the stances) and the Scrum Guide section on the Product Owner'},
+ {n:'Product vision & strategy',e:'🔭',r:'The Professional Product Owner: vision and strategy'},
+ {n:'Product Goal & roadmapping',e:'🎯',r:'Scrum Guide: Product Goal, and the roadmapping chapter in the book'},
+ {n:'Backlog management & ordering',e:'📋',r:'Scrum Guide: Product Backlog'},
+ {n:'Value & Evidence-Based Management',e:'💎',r:'Scrum.org Evidence-Based Management Guide'},
+ {n:'Stakeholders & customers',e:'🤝',r:'The Professional Product Owner: stakeholders and customers'},
+ {n:'Experimentation & feedback',e:'🧪',r:'The Professional Product Owner: experiments and feedback loops'},
+ {n:'Sprint Planning & Sprint Goal',e:'🗓️',r:'Scrum Guide: Sprint Planning and the Sprint'},
+ {n:'Sprint Review & Retrospective',e:'🔁',r:'Scrum Guide: Sprint Review and Sprint Retrospective'},
+ {n:'Increment & Definition of Done',e:'✅',r:'Scrum Guide: Increment and Definition of Done'},
+ {n:'Scrum Team, Scrum Master & Developers',e:'👥',r:'Scrum Guide: The Scrum Team'},
+ {n:'Scrum theory & values',e:'🧭',r:'Scrum Guide: Scrum Theory and Scrum Values'}
+];
+/* [theme, type s|m|t, question, options (null for true/false), correct indices, explanation] */
+const Q=[
+ [0,'s','Who is accountable for maximizing the value of the product resulting from the work of the Scrum Team?',['The Product Owner','The Scrum Master','The Developers','The stakeholders'],[0],'The Scrum Guide makes the Product Owner accountable for maximizing value. How they do it can vary a lot, but the accountability is theirs.'],
+ [0,'t','The Product Owner is one person, not a committee.',null,[0],'True. The PO may represent the needs of many stakeholders, but it is one person, and anyone who wants to change the backlog has to convince that person.'],
+ [0,'m','Which TWO are Product Owner accountabilities? (Choose 2)',['Developing and explicitly communicating the Product Goal','Ordering Product Backlog items','Assigning tasks to individual Developers','Facilitating the Daily Scrum'],[0,1],'The PO owns the Product Goal and the ordering of the Product Backlog. Developers manage their own work, and the Daily Scrum belongs to the Developers.'],
+ [0,'s','The Product Owner has too much on their plate and wants help with Product Backlog management. What is true?',['They can delegate the work but remain accountable','Only the Product Owner may ever touch the Product Backlog','They must ask the Scrum Master for permission','Delegation is only allowed to stakeholders'],[0],'The Scrum Guide says the PO may do the work or have others do it, but the PO stays accountable.'],
+ [0,'s','In the eight stances of a Product Owner, which stance is about forming hypotheses and testing them with real users?',['Experimenter','Visionary','Communicator','Leader'],[0],'The Experimenter stance is about validating assumptions through small, safe-to-fail experiments.'],
+ [0,'s','A senior executive asks the Product Owner to move their favorite feature to the top of the Product Backlog. What is the best response?',['Listen, explain the value-based reasoning and decide the order transparently','Move it up immediately because the executive is senior and leadership should be kept happy','Let the Developers and stakeholders vote, and follow the majority outcome','Decline to talk to executives'],[0],'The PO stays open to input but keeps the decision authority and makes the reasoning transparent.'],
+ [0,'s','Who has the authority to cancel a Sprint?',['The Product Owner','The Scrum Master','The Developers','The stakeholders'],[0],'Only the PO can cancel a Sprint, typically when the Sprint Goal becomes obsolete. Others may suggest it.'],
+
+ [1,'s','What is the main purpose of a product vision?',['To describe the long-term purpose and inspire everyone toward a desired future','To list every feature planned for the next releases together with committed delivery dates','To fix the scope and schedule so the Developers know exactly what to build for a year','To replace the Sprint Goal'],[0],'A vision describes why the product exists and where it is heading. It guides decisions rather than fixing scope or dates.'],
+ [1,'s','Which statement best describes a product strategy?',['A coherent approach for achieving the vision, e.g. target customers and how to stand out','A detailed plan of tasks that tells the Developers exactly what to build each Sprint','A detailed Gantt chart with milestones that shows who does what until release','The Definition of Done'],[0],'Strategy is the path to the vision: who it is for, what makes it different and how value will be created.'],
+ [1,'t','A product vision should be shared only with the Product Owner to avoid confusion.',null,[1],'False. A vision only works when the Scrum Team and stakeholders know it and can align on it.'],
+ [1,'m','Which TWO help keep a product vision alive and understood? (Choose 2)',['Making it visible, e.g. a short vision statement or board','Revisiting it in conversations and Sprint Reviews','Writing a 200-page requirements document','Sharing it only after release'],[0,1],'Visibility and regular conversation keep the vision a living guide rather than a forgotten document.'],
+ [1,'s','A major market shift makes the current vision outdated. What should the Product Owner do?',['Update the vision, communicate it and adapt the Product Goal and Product Backlog','Ignore it until the current release is finished, then discuss the vision with stakeholders','Wait for the Scrum Master and management to decide how the vision should change','Keep the vision, since changing it shows weakness'],[0],'Scrum is built on inspection and adaptation, and that includes the vision when evidence says it should change.'],
+ [1,'s','Which question best tests whether you have a clear product strategy?',['Who are we creating value for, and why would they choose us?','How many story points can the team deliver in a Sprint, and is that number growing?','How many meetings do we have?','Which tool do we use for tracking the Product Backlog and reporting progress?'],[0],'Strategy is about customers, value and differentiation, not internal output measures.'],
+ [1,'t','Once agreed, a product vision should never change so the team stays focused.',null,[1],'False. A vision is stable but not frozen. New evidence can and should lead to changes.'],
+
+ [2,'s','Which artifact contains the commitment called the Product Goal?',['The Product Backlog','The Sprint Backlog','The Increment','The roadmap'],[0],'Each artifact has a commitment: the Product Goal for the Product Backlog, the Sprint Goal for the Sprint Backlog and the Definition of Done for the Increment.'],
+ [2,'s','How many Product Goals should a Scrum Team work toward at a time?',['One','As many as there are stakeholders','One per Developer','One per Sprint Goal'],[0],'The Scrum Team fulfills or abandons one Product Goal before taking on the next.'],
+ [2,'t','The Product Goal is the commitment for the Product Backlog.',null,[0],'True. It describes a future state of the product and is a target for the Scrum Team to plan against.'],
+ [2,'s','What is the best way to use a product roadmap?',['As a flexible, outcome-focused view of how the product may evolve','As a fixed contract with stakeholders that lists features and delivery dates','As the Sprint plan','As a replacement for the Product Backlog once the plan for the year is agreed'],[0],'A roadmap shows direction and intended outcomes. Treating it as a fixed promise removes the ability to adapt.'],
+ [2,'m','Which TWO are true about the Product Goal? (Choose 2)',['It is a long-term objective for the Scrum Team','It is fulfilled or abandoned before the next one is taken on','It lists all features for the release','It is owned by the Developers'],[0,1],'The Product Goal is a long-term objective, and the team focuses on one at a time.'],
+ [2,'s','The Scrum Team learns that the current Product Goal can no longer be reached in a valuable way. What is best?',['Revise or abandon the Product Goal and set a new one','Keep going as planned, since a Product Goal cannot be changed once it has been set','Ask the Developers to work harder and longer until the Product Goal is reached','Hide the news from stakeholders'],[0],'A Product Goal can be abandoned or replaced when evidence shows it no longer serves value.'],
+ [2,'s','A roadmap lists exact features with dates twelve months ahead. What is the biggest risk?',['Stakeholders see it as a promise, which creates false certainty','It makes the Product Backlog too short, because every item is already fixed in the roadmap','It stops the Developers from collaborating with each other and with the Product Owner','It violates the Definition of Done'],[0],'Long-range dates and scope create expectations that rarely match reality in complex work.'],
+
+ [3,'s','How does the Scrum Guide describe the Product Backlog?',['An emergent, ordered list of what is needed to improve the product','A fixed specification signed off before the first Sprint','A list of tasks for the current Sprint only, maintained by the Developers','A report of finished work that is updated at the end of every Sprint'],[0],'The Product Backlog is the single source of work for the Scrum Team, and it keeps evolving as the product and market evolve.'],
+ [3,'s','Who is accountable for Product Backlog management?',['The Product Owner','The Scrum Master','The Developers','The project manager'],[0],'The PO is accountable, including making items clear, ordering them and ensuring transparency.'],
+ [3,'t','The Product Backlog is complete once the first Sprint starts.',null,[1],'False. It is never complete. It emerges and changes as long as the product exists.'],
+ [3,'s','What is Product Backlog refinement?',['The ongoing act of adding detail, estimates and order to items','A formal Scrum event with a fixed agenda and a timebox of two hours','A task done only by the Product Owner, without involving the Developers','A one-off activity before Sprint 1'],[0],'Refinement is an ongoing activity, not a formal event. It is usually collaborative between the PO and the Developers.'],
+ [3,'m','Which TWO are valid factors when ordering the Product Backlog? (Choose 2)',['Expected value','Dependencies and risk','The order in which stakeholders emailed','Developers’ favorite technologies'],[0,1],'Value, risk, dependencies, urgency and learning drive ordering. Convenience and politics do not.'],
+ [3,'s','Which Product Backlog items are typically the most detailed?',['The ones at the top, likely to be worked on soon','The ones at the bottom, because they have been in the backlog the longest','All items equally','Only the items that were requested directly by stakeholders'],[0],'Items at the top are smaller and clearer so they can be done within a Sprint. Items further out can stay rough.'],
+ [3,'s','The Product Backlog has 600 items, many of them several years old. What should the PO do?',['Remove or archive items unlikely to create value and keep it lean','Keep everything for traceability, because Scrum does not allow removing items','Ask the Developers to estimate all of the items so the order can be recalculated','Start the next Sprint without looking at it'],[0],'A bloated backlog hides what matters. The PO keeps it transparent and relevant.'],
+
+ [4,'s','Which are the four Key Value Areas of Evidence-Based Management?',['Current Value, Unrealized Value, Time-to-Market, Ability to Innovate','Velocity, Burndown, Scope and Cost, as measured per Sprint','Quality, Speed, Cost and Scope, the classic project triangle','Revenue, Profit, Margin and Growth, the financial measures of the business'],[0],'EBM looks at value today, how much more is possible, how fast you deliver, and how well you can keep innovating.'],
+ [4,'s','What does Current Value measure?',['The value the product delivers to customers today','The value that could still be captured','How quickly new features and fixes reach users after they are built','The number of Sprints completed'],[0],'Current Value looks at the value realized right now, e.g. customer satisfaction or revenue per employee.'],
+ [4,'s','What does Unrealized Value represent?',['The potential value the product could still deliver if all needs were met','The cost of all work that is started but not yet finished in the Sprint','The number of Product Backlog items that have not yet been refined or started','The Developers’ unused capacity'],[0],'It is the gap between today’s value and the best possible value for customers.'],
+ [4,'s','Which Key Value Area is about how quickly the organization can deliver new capabilities and value?',['Time-to-Market','Current Value','Unrealized Value','Ability to Innovate'],[0],'Time-to-Market is about delivery speed, e.g. release frequency and lead time.'],
+ [4,'s','Technical debt and defects mostly impact which Key Value Area?',['Ability to Innovate','Current Value','Unrealized Value','Time-to-Market only'],[0],'Ability to Innovate reflects the capacity to deliver new capabilities. Technical debt, defects and delays reduce it.'],
+ [4,'t','Velocity is a reliable measure of the value delivered to customers.',null,[1],'False. Velocity is an output measure. Value is about outcomes for customers and the organization.'],
+ [4,'m','Which TWO are better indicators of value than output metrics? (Choose 2)',['Customer satisfaction','Actual product usage','Story points completed','Lines of code written'],[0,1],'Outcome measures show whether customers benefit. Story points and code volume only show activity.'],
+
+ [5,'s','Which best describes stakeholders?',['People outside the Scrum Team with a specific interest in or knowledge of the product','Only the customers who pay for the product or service, because they fund the work','The managers of the Developers, who decide on staffing and budgets for the Scrum Team','Anyone who is invited to attend the Daily Scrum or the Sprint Planning'],[0],'Stakeholders can be users, customers, executives, support, legal and more. They are not part of the Scrum Team.'],
+ [5,'t','A Product Owner should avoid contact with stakeholders during the Sprint to protect the Developers.',null,[1],'False. Ongoing collaboration with stakeholders is part of the job, and it is how the PO learns what creates value.'],
+ [5,'s','Two stakeholders strongly disagree on priorities. What should the Product Owner do?',['Facilitate the conversation, then decide and explain the order transparently','Let the stakeholder with the strongest argument or highest title win','Ask the Scrum Master to choose between them and communicate the result','Split the order 50/50 so that both stakeholders receive an equal share'],[0],'The PO listens to everyone but is the one who decides the order, based on value.'],
+ [5,'m','Which TWO are good ways to involve stakeholders? (Choose 2)',['Inviting them to collaborate in the Sprint Review','Regularly talking about the Product Backlog and roadmap','Letting them assign work to Developers','Requiring their sign-off before each Sprint'],[0,1],'Collaboration and transparency are the aim. Stakeholders influence the PO, not the Developers directly.'],
+ [5,'s','A customer contacts a Developer and asks for a new feature to be added right now. What is the best reaction?',['Listen kindly, then bring the request to the Product Owner and the Product Backlog','Add it to the Sprint immediately, since the customer is paying for the product','Ignore the customer, because Developers only work from the Sprint Backlog','Ask the customer to email the Scrum Master'],[0],'Input is welcome, but changes to the Product Backlog go through the Product Owner.'],
+ [5,'s','A Product Owner spends time with users to understand their problems and needs. Which stance is this?',['Customer Representative','Decision Maker','Leader','Communicator'],[0],'The Customer Representative stance is about being the voice of the customer inside the team.'],
+ [5,'s','An executive demands a fixed date and fixed scope for the next year. What is the best PO approach?',['Be transparent about uncertainty and offer forecasts and options based on evidence','Promise it to keep the peace and sort out the details later','Refuse to discuss it because Scrum does not allow any forecasts','Tell them the Developers decide dates and scope, not the Product Owner'],[0],'In complex work, honesty about uncertainty plus frequent delivery builds more trust than fixed promises.'],
+
+ [6,'s','Why release valuable Increments early and often?',['To get real feedback sooner and reduce risk','To save the cost of testing, since users will find the issues','To avoid having to talk to stakeholders about unfinished work','To keep the Sprint Backlog small'],[0],'Frequent releases turn assumptions into evidence quickly.'],
+ [6,'t','A hypothesis-driven approach means treating assumptions about customers as things to be tested.',null,[0],'True. Assumptions become hypotheses and are validated with small experiments.'],
+ [6,'s','What best describes a minimum viable product (MVP)?',['The smallest thing that lets you learn whether an idea creates value','A low-quality first release that is fixed in later versions','A product with every feature the stakeholders have asked for','A prototype that is only shown to the Developers'],[0],'An MVP is about validated learning, not about cutting quality.'],
+ [6,'m','Which TWO are characteristics of a good experiment? (Choose 2)',['It starts from a clear hypothesis','It has measurable success criteria','It guarantees the outcome','It runs for six months before any review'],[0,1],'A good experiment is small, measurable and aimed at learning.'],
+ [6,'s','A new feature was released and almost nobody uses it. What should the PO do?',['Treat it as learning, inspect why and adapt the backlog, maybe removing the feature','Blame the Developers for building something nobody wanted','Keep the data to yourself so stakeholders do not lose trust','Build more features like it, because people will eventually discover it'],[0],'Evidence that something isn’t valuable is a useful result.'],
+ [6,'s','Which gives the fastest feedback about real customer value?',['Releasing an Increment to actual users','Writing a detailed specification','A long status report sent to all stakeholders each month','An internal approval meeting with management and the Developers'],[0],'Real usage beats opinions and documents.'],
+ [6,'t','Delivering many features means a product has delivered a lot of value.',null,[1],'False. Output is not outcome. Many features can still deliver little value.'],
+
+ [7,'s','Which three topics are addressed in Sprint Planning?',['Why, what and how','Who, when and where','Cost, scope and time','Plan, do and check'],[0],'Why is this Sprint valuable (the Sprint Goal), what can be done, and how will the work get done.'],
+ [7,'s','Who crafts the Sprint Goal?',['The whole Scrum Team, collaboratively','The Product Owner alone, since the PO owns the product','The Scrum Master alone, since the SM is responsible for Scrum','The stakeholders, who know best what is needed'],[0],'The Sprint Goal is created during Sprint Planning by the Scrum Team.'],
+ [7,'s','What is the maximum timebox for Sprint Planning for a one-month Sprint?',['8 hours','4 hours','2 hours','1 day'],[0],'Sprint Planning is at most 8 hours for a one-month Sprint, and usually shorter for shorter Sprints.'],
+ [7,'t','During the Sprint, the Developers can change the Sprint Goal if they believe a different one is better.',null,[1],'False. The Sprint Goal does not change during the Sprint. Scope can be clarified and renegotiated with the PO.'],
+ [7,'s','Who decides how many Product Backlog items can be done in the Sprint?',['The Developers','The Product Owner','The Scrum Master','The stakeholders'],[0],'Developers forecast what they can do, and the PO proposes what is most valuable.'],
+ [7,'m','Which TWO are true about the Sprint Goal? (Choose 2)',['It is a single objective for the Sprint','It is the commitment for the Sprint Backlog','It is written by the PO alone','It lists every item in the Sprint'],[0,1],'A single objective gives focus and coherence, and it is the commitment of the Sprint Backlog.'],
+ [7,'s','What is the maximum length of a Sprint?',['One month','Two weeks','Six weeks','There is no limit'],[0],'Sprints are fixed-length events of one month or less.'],
+
+ [8,'s','What is the purpose of the Sprint Review?',['To inspect the outcome of the Sprint and determine future adaptations','To approve the Sprint work formally before it may be released to customers','To report status to management and stakeholders, including a schedule update','To evaluate the Developers’ performance'],[0],'It is a working session where the Scrum Team and stakeholders collaborate on what was done and what to do next.'],
+ [8,'t','The Sprint Review should be a one-way demo without discussion.',null,[1],'False. It is a working session. Feedback and adapting the Product Backlog are the point.'],
+ [8,'s','What is the purpose of the Sprint Retrospective?',['To plan ways to increase quality and effectiveness','To plan the scope of the next Sprint together with the Product Owner','To show the Increment to stakeholders and collect their feedback','To estimate the items in the Product Backlog for the coming Sprints'],[0],'The Scrum Team inspects how the last Sprint went and identifies improvements.'],
+ [8,'s','What is the maximum timebox of a Sprint Retrospective in a one-month Sprint?',['3 hours','1 hour','4 hours','8 hours'],[0],'Three hours for a one-month Sprint, shorter for shorter Sprints.'],
+ [8,'s','Who participates in the Sprint Retrospective?',['The Scrum Team','The Scrum Team and all stakeholders','Only the Developers','Only the Scrum Master and Product Owner'],[0],'It is for the Scrum Team: the Product Owner, Scrum Master and Developers.'],
+ [8,'s','What is the maximum timebox of a Sprint Review in a one-month Sprint?',['4 hours','2 hours','8 hours','3 hours'],[0],'Four hours for a one-month Sprint, shorter for shorter Sprints.'],
+
+ [9,'s','What is an Increment?',['A concrete stepping stone toward the Product Goal that is usable','A list of features the Developers promised to deliver during the Sprint','A document describing the design and architecture of the product','Work that is still in progress but already visible to stakeholders'],[0],'An Increment is usable and meets the Definition of Done.'],
+ [9,'t','An Increment can be delivered to stakeholders before the end of the Sprint.',null,[0],'True. Scrum does not prevent delivery during the Sprint, and the Sprint Review is not a gate for release.'],
+ [9,'s','What is the Definition of Done?',['A formal description of the state of the Increment when it meets quality measures','A list of tasks that the Developers must complete in each Sprint','The Product Owner’s acceptance criteria for one individual Product Backlog item','A document for management that shows when the project is finished'],[0],'The Definition of Done is the commitment for the Increment and creates transparency.'],
+ [9,'s','There is no organizational Definition of Done. Who creates one?',['The Scrum Team','The Product Owner alone','The Scrum Master alone','The stakeholders'],[0],'If no organizational standard exists, the Scrum Team defines its own.'],
+ [9,'s','A Product Backlog item does not meet the Definition of Done at the end of the Sprint. What happens?',['It can’t be released or shown as done, and it returns to the Product Backlog','It is released to customers together with a warning about its status','The Definition of Done is relaxed for that item so that it can be accepted','It automatically becomes part of the next Sprint without any further discussion'],[0],'Only work that meets the Definition of Done is part of the Increment. The rest goes back to the Product Backlog for re-ordering.'],
+ [9,'s','Several Scrum Teams work on one product. What applies to the Definition of Done?',['They must all conform to a shared Definition of Done','Each team defines its own so that the teams stay autonomous','The Product Owner decides, and the lowest one of the teams is used','No Definition of Done is needed when the teams share one backlog'],[0],'For one product, the Increment must be integrated and consistent, so the teams share the Definition of Done.'],
+
+ [10,'s','What is the typical size of a Scrum Team?',['10 or fewer people','Exactly 7 people','15 to 20 people','As many as needed'],[0],'Small teams communicate better and are more productive.'],
+ [10,'t','Scrum Teams have sub-teams or hierarchies.',null,[1],'False. A Scrum Team is a cohesive unit with no sub-teams or hierarchies.'],
+ [10,'s','Who is accountable for creating the Sprint Backlog?',['The Developers','The Product Owner','The Scrum Master','The stakeholders'],[0],'Developers create the plan for the Sprint, the Sprint Backlog.'],
+ [10,'s','How does the Scrum Master serve the Product Owner?',['By helping with techniques for Product Goal definition and Product Backlog management','By ordering the Product Backlog when the Product Owner is not available','By deciding what the Developers build and in which order they do it','By representing the stakeholders in the Sprint Planning and Review'],[0],'The Scrum Master helps find techniques, facilitates stakeholder collaboration and helps the team understand the need for clear items.'],
+ [10,'s','The Daily Scrum is intended for:',['The Developers, within 15 minutes','The Scrum Master to get status','The Product Owner to assign tasks','The stakeholders to receive reports'],[0],'It is an event for the Developers to inspect progress toward the Sprint Goal, with a 15-minute timebox.'],
+ [10,'s','Who is accountable for establishing Scrum as defined in the Scrum Guide?',['The Scrum Master','The Product Owner','The Developers','Management'],[0],'The Scrum Master is accountable for the Scrum Team’s effectiveness and for establishing Scrum.'],
+
+ [11,'s','What are the three pillars of empiricism?',['Transparency, inspection, adaptation','Plan, do, check, act, repeated in every Sprint','Roles, events and artifacts, the three building blocks of Scrum','Speed, quality, cost'],[0],'Scrum is founded on empiricism, supported by these three pillars.'],
+ [11,'m','Which THREE are Scrum Values? (Choose 3)',['Courage','Openness','Respect','Speed'],[0,1,2],'The five values are Commitment, Focus, Openness, Respect and Courage. Speed is not one of them.'],
+ [11,'s','What does empiricism mean in Scrum?',['Knowledge comes from experience, and decisions are made on what is observed','Everything is planned up front and then executed as precisely as possible','Decisions are made by the highest-ranking person','Only measurable data counts, and experience or feedback is ignored'],[0],'Empiricism favors learning by doing and observing.'],
+ [11,'s','What is lean thinking in Scrum about?',['Reducing waste and focusing on the essentials','Working fewer hours so that the team avoids overload','Having smaller teams only, with no more than three people','Removing all documentation to be as fast as possible'],[0],'Lean thinking is about reducing waste and focusing on what matters.'],
+ [11,'t','Scrum is a prescriptive methodology with detailed procedures for every situation.',null,[1],'False. Scrum is a purposefully incomplete, lightweight framework.'],
+ [11,'s','How does the Scrum Guide describe Scrum?',['A lightweight framework that helps generate value through adaptive solutions for complex problems','A detailed methodology that prescribes the steps for every kind of project and team','A set of engineering practices for writing, testing and releasing software','A reporting tool that gives management a view of progress and cost'],[0],'Scrum is a lightweight framework for complex problems.'],
+
+ [0,'s','Which statement about accountability for product value is correct?',['The Product Owner is accountable for maximizing value, even when others help','Value is a shared responsibility with no single accountable person','The Scrum Master answers for value and the Product Owner for the schedule','The Developers are accountable for value and the Product Owner for the budget'],[0],'The Product Owner is accountable for maximizing the value of the product. The whole Scrum Team contributes, but the accountability is the PO’s.'],
+ [0,'t','A committee of three managers can jointly act as the Product Owner of a Scrum Team.',null,[1],'False. The Product Owner is one person. A committee can influence the PO, but the PO makes the decisions.'],
+ [0,'m','Which TWO are part of the Product Owner’s work on the Product Backlog? (Choose 2)',['Creating and clearly communicating Product Backlog items','Ensuring the Product Backlog is transparent and understood','Writing the Sprint Backlog tasks','Approving every technical design decision'],[0,1],'The PO creates and communicates items and keeps the backlog transparent. Developers plan their own tasks and make technical decisions.'],
+ [0,'s','The Product Owner asks a Developer to help write Product Backlog items. Is that allowed?',['Yes, the PO can delegate the work but remains accountable','No, only the PO may write Product Backlog items','Yes, and the Developer then becomes accountable for the items','No, unless the Scrum Master approves'],[0],'The Product Owner may do the work or delegate it, but stays accountable.'],
+ [0,'s','A PO tests a new onboarding flow with 50 customers before building it fully. Which stance is shown?',['Experimenter','Decision Maker','Influencer','Visionary'],[0],'Testing a hypothesis with a small, safe experiment is the Experimenter stance.'],
+ [0,'s','A Developer thinks the ordering is wrong and wants to reorder the Product Backlog personally. What is true?',['Developers can give input, but the PO decides the order','The Developers decide the order because they know the work best','The Scrum Master settles the dispute','The order is decided by majority vote'],[0],'The PO is accountable for ordering the Product Backlog. Input is welcome, but the decision stays with the PO.'],
+ [0,'s','The Sprint Goal became obsolete because the company changed direction. Who may cancel the Sprint?',['Only the Product Owner','The Scrum Master after consulting the CEO','The Developers, by consensus','Any stakeholder who notices'],[0],'Only the Product Owner can cancel a Sprint.'],
+
+ [1,'s','Which best answers the question: “Why does our product exist and where is it heading?”',['The product vision','The Definition of Done','The Sprint Backlog','The velocity trend'],[0],'The product vision describes the purpose and desired future of the product.'],
+ [1,'s','Two teams share a vision. One plans to win with low prices, the other with superior quality. What does this difference describe?',['Different product strategies','Different Sprint Goals','Different Definitions of Done','Different Scrum Masters'],[0],'Strategy is the approach to reach the vision, including how to stand out.'],
+ [1,'t','Stakeholders and the Scrum Team should be able to explain the product vision in their own words.',null,[0],'True. A shared vision is understood and owned beyond the Product Owner.'],
+ [1,'m','Which TWO are signs that a product vision is working? (Choose 2)',['People in the Scrum Team can explain it and use it to make decisions','Stakeholders can see how new backlog items connect to it','Only the executive team knows it','It is rewritten after every Sprint Review regardless of evidence'],[0,1],'A working vision is understood and used to guide choices. Secrecy or constant rewriting makes it useless.'],
+ [1,'s','Customer research shows the target audience has moved to another platform, while the vision still describes the old one. What now?',['Re-examine the vision and strategy, then adapt the Product Goal and backlog','Keep the vision and wait for customers to return','Let the Developers decide the new direction, since they know the technology','Wait until the next release before reacting to the new situation'],[0],'When evidence changes the picture, the vision and strategy are inspected and adapted.'],
+ [1,'s','Which is the strongest sign of an unclear product strategy?',['Nobody can explain who the product is for or what makes it different','The Product Backlog is ordered by the Product Owner every Sprint','Sprints have a fixed length of one month or less','The Daily Scrum takes 15 minutes every working day'],[0],'A clear strategy answers who the product is for and how it stands out.'],
+ [1,'t','A product vision is a plan with tasks and dates.',null,[1],'False. It describes purpose and a desired future, not tasks and dates.'],
+
+ [2,'s','Where does a Scrum Team make its long-term objective transparent?',['In the Product Backlog, as its commitment (the Product Goal)','In the Sprint Backlog, where the Developers plan the work','In the Definition of Done, as the Increment’s quality bar','In the invitation that is sent for the Sprint Review'],[0],'The Product Goal is the commitment for the Product Backlog.'],
+ [2,'s','A Scrum Team reached its Product Goal. What is the right next step regarding goals?',['Set the next Product Goal, working toward one at a time','Run several Product Goals in parallel from now on','Wait for stakeholders to define a Sprint Goal','Close the Product Backlog and disband the Scrum Team'],[0],'The Scrum Team works toward one Product Goal at a time and picks the next one when the current one is fulfilled or abandoned.'],
+ [2,'t','The Product Goal gives the Scrum Team a target to plan against.',null,[0],'True. It describes a future state of the product that the team plans toward.'],
+ [2,'s','Stakeholders ask for a roadmap. Which approach fits Scrum best?',['Share a roadmap of goals and outcomes that is updated as the team learns','Commit to features and dates for the next 18 months','Refuse, since Scrum does not allow any plans beyond the current Sprint','Let the Developers write it without the PO'],[0],'A roadmap is a flexible view of direction and outcomes, not a fixed commitment.'],
+ [2,'m','Which TWO describe how a Product Goal relates to Sprints? (Choose 2)',['Sprints are steps toward the Product Goal','Sprint Goals should contribute toward it','Every Sprint must achieve the entire Product Goal','The Product Goal changes every Sprint'],[0,1],'The Product Goal is long-term. Each Sprint and its Sprint Goal moves the team closer to it.'],
+ [2,'s','After several Sprints the data shows nobody wants what the Product Goal describes. What should the PO do?',['Be transparent and consider abandoning or replacing the Product Goal','Add more features to the same goal until customers start using them','Cancel the Scrum Team and start again with a new group of people','Wait for the Scrum Master’s decision'],[0],'A Product Goal can be abandoned or replaced when evidence says it no longer serves value.'],
+ [2,'s','Why is a detailed 12-month feature roadmap with dates risky in complex work?',['Reality changes, and stakeholders may treat it as a guarantee','It violates the Scrum Guide’s timeboxes','Developers cannot read roadmaps that contain dates, which confuses them','It makes the Sprint Goal unnecessary'],[0],'In complex work, long-range dates and scope create expectations that rarely hold.'],
+
+ [3,'s','Which statement about the Product Backlog is correct?',['It is the single source of work and keeps changing as the product evolves','It is fixed once the stakeholders have approved it at the start','It contains only the work of the current Sprint','It is owned and maintained by the Scrum Master for the team'],[0],'The Product Backlog is emergent and is the single source of work for the Scrum Team.'],
+ [3,'s','Who answers for the transparency, ordering and clarity of the Product Backlog?',['The Product Owner','The Developers collectively','The Scrum Master','The stakeholder who requested the items'],[0],'The Product Owner is accountable for Product Backlog management.'],
+ [3,'t','New items can still be added to the Product Backlog during a Sprint.',null,[0],'True. The Product Backlog is emergent and can change at any time. It is the Sprint Goal that is protected during the Sprint.'],
+ [3,'s','Developers and the Product Owner spend part of the Sprint clarifying and sizing upcoming items. What is this?',['Product Backlog refinement, an ongoing activity','Sprint Planning part two, which is held in the middle of the Sprint','A mandatory event in the Scrum Guide','Sprint Review preparation, which is a mandatory part of the Review'],[0],'Refinement is an ongoing activity, not a formal event.'],
+ [3,'m','Which TWO are reasonable reasons to move an item up the Product Backlog? (Choose 2)',['Customer feedback shows its value is higher than expected','Another high-value item depends on it','A stakeholder with a high job title asked for it','It was the first item that was added'],[0,1],'Value, dependencies, risk and learning drive ordering, not hierarchy or age.'],
+ [3,'s','Developers can’t start an item at the top of the Product Backlog because it is too vague. What went wrong?',['Items near the top should be refined enough to be done within a Sprint','Nothing went wrong, because top items should stay vague until the Sprint starts','The Scrum Master failed to order the Product Backlog correctly','The stakeholders did not approve the item before the Sprint began'],[0],'Items at the top should be clear and small enough to be done in a Sprint.'],
+ [3,'s','A new PO inherits a Product Backlog with 400 outdated items. What is a sensible first move?',['Clean it up so it reflects the current goal, removing what no longer adds value','Ask the Developers to refine all 400 items','Cancel the Product Goal and start a new Product Backlog from scratch','Keep it unchanged for traceability'],[0],'A lean, relevant backlog keeps the work transparent.'],
+
+ [4,'s','Which is NOT one of the four Key Value Areas of Evidence-Based Management?',['Team Velocity','Current Value','Time-to-Market','Ability to Innovate'],[0],'The four areas are Current Value, Unrealized Value, Time-to-Market and Ability to Innovate. Velocity is an output measure.'],
+ [4,'s','Customer satisfaction and revenue per employee are examples of metrics for which Key Value Area?',['Current Value','Unrealized Value','Time-to-Market','Ability to Innovate'],[0],'Current Value covers the value realized today.'],
+ [4,'s','The gap between how customers experience the product today and the best possible experience is called…',['Unrealized Value','Current Value','Technical debt','Time-to-Market'],[0],'Unrealized Value is the potential value not yet captured.'],
+ [4,'s','Release frequency and lead time are typical measures of which Key Value Area?',['Time-to-Market','Current Value','Unrealized Value','Ability to Innovate'],[0],'Time-to-Market is about how quickly new value can be delivered.'],
+ [4,'s','A growing number of defects and a slow build pipeline mostly reduce which Key Value Area?',['Ability to Innovate','Current Value','Unrealized Value','None of them'],[0],'Ability to Innovate is the capacity to deliver new capabilities, which defects and slow pipelines reduce.'],
+ [4,'t','A team that doubles its velocity proves customers receive twice as much value.',null,[1],'False. Velocity measures output, not the value customers experience.'],
+ [4,'m','Which TWO are examples of outcome-based measures? (Choose 2)',['Customer retention','Time customers need to complete a key task','Number of tickets closed','Number of features shipped'],[0,1],'Outcome measures reflect results for customers. Tickets and features are output.'],
+
+ [5,'s','A legal advisor, an end user and a sales director care about the product but are not on the Scrum Team. What are they?',['Stakeholders','Developers','Product Owners','Scrum Masters'],[0],'Stakeholders are people outside the Scrum Team with an interest in or knowledge of the product.'],
+ [5,'t','The Product Owner should regularly talk to users and stakeholders, also between Sprint Reviews.',null,[0],'True. Ongoing collaboration is how the PO learns what creates value.'],
+ [5,'s','Sales wants feature A first and support wants feature B first. Both are senior. What does the PO do?',['Gather their reasoning, weigh the value, decide, and explain the decision','Choose A because sales brings revenue','Let the Developers pick the one they find the most interesting','Put both in the Sprint regardless of capacity'],[0],'The PO listens to everyone and decides based on value, while staying transparent.'],
+ [5,'m','Which TWO help the Scrum Team collaborate well with stakeholders? (Choose 2)',['Making the Product Backlog transparent to them','Inviting them to give feedback on the Increment','Giving them direct control over the Developers’ daily work','Hiding unfinished work until it is perfect'],[0,1],'Transparency and feedback loops build trust. Stakeholders influence the PO, not the Developers’ daily work.'],
+ [5,'s','A stakeholder insists that a Developer add a feature this Sprint. Who decides whether it enters the Product Backlog and where?',['The Product Owner','The Developer who was asked','The Scrum Master','The stakeholder'],[0],'Changes to the Product Backlog and its order are decided by the Product Owner.'],
+ [5,'s','A PO regularly shadows customers using the product and brings their pain points to the team. Which stance is this?',['Customer Representative','Visionary','Experimenter','Decision Maker'],[0],'Bringing the voice of the customer into the team is the Customer Representative stance.'],
+ [5,'s','A VP wants a commitment to all features by a fixed date. Which response builds the most trust?',['Explain what is known, give a forecast with uncertainty and show progress each Sprint','Say yes, promise the date and plan overtime to make sure it happens','Say no firmly and avoid the topic in future discussions','Give a date, because stakeholders need certainty, without discussing scope'],[0],'Honesty about uncertainty plus frequent evidence of progress builds trust.'],
+
+ [6,'s','A PO can perfect the product for six months or release a small valuable Increment now. Which better supports empiricism?',['Releasing a small Increment to learn from real use','Perfecting it first so that customers only see a finished product','Waiting until next quarter to see how the market develops','Releasing it internally only, to collect opinions from colleagues'],[0],'Empiricism relies on real feedback, so small early releases win.'],
+ [6,'t','Assumptions about what customers want are facts until proven wrong.',null,[1],'False. They are hypotheses until validated.'],
+ [6,'s','What is the main goal of releasing an MVP?',['Learn quickly whether the idea creates value','Impress stakeholders with a polished demo','Finish all planned features','Reduce testing and quality work to save time'],[0],'An MVP is a vehicle for validated learning.'],
+ [6,'m','Which TWO help a PO decide whether an experiment worked? (Choose 2)',['A measurable outcome defined before the experiment','Evidence from real customer behavior','The Developers’ opinion alone','The number of tasks completed'],[0,1],'Define success up front and judge it by real behavior.'],
+ [6,'s','Analytics show customers abandon a new checkout step. What is the best reaction?',['Use the evidence to adapt the Product Backlog and try another approach','Keep it unchanged since it was planned and approved','Blame the Developers for building a poor checkout step','Wait for the quarterly report before deciding what to change'],[0],'Evidence is input for adaptation.'],
+ [6,'s','Which approach gives the most reliable evidence of customer value?',['Observing real customers use a released Increment','Asking internal managers for their opinion','Writing a detailed business case with revenue forecasts','Using the Developers’ estimates of how much value each item has'],[0],'Real usage beats opinions and forecasts.'],
+ [6,'t','Output measures like features delivered show whether customers benefit.',null,[1],'False. Output is not outcome. Customers may not benefit from what was built.'],
+
+ [7,'s','Sprint Planning answers which questions?',['Why is the Sprint valuable, what can be done and how will the work get done','Who is late, what is blocked and who is next','What went well, what didn’t and what to change','Is the Definition of Done met, who approves and when to release'],[0],'The three topics are why, what and how.'],
+ [7,'s','Who must collaborate to craft the Sprint Goal in Sprint Planning?',['The entire Scrum Team','Only the Developers','Only the Product Owner and stakeholders','Only the Scrum Master'],[0],'The Scrum Team crafts the Sprint Goal together.'],
+ [7,'s','What does the Scrum Guide say about the Sprint Planning timebox?',['At most 8 hours for a one-month Sprint, usually shorter for shorter Sprints','Always exactly 4 hours, regardless of the length of the Sprint','Always 2 hours per week of Sprint, so 4 hours for a two-week Sprint','There is no timebox, the event ends when the team is ready'],[0],'Sprint Planning is timeboxed to a maximum of eight hours for a one-month Sprint.'],
+ [7,'t','The Developers may renegotiate scope with the Product Owner during the Sprint without changing the Sprint Goal.',null,[0],'True. Scope can be clarified and renegotiated as more is learned, while the Sprint Goal stays.'],
+ [7,'s','The PO would like 12 items in the Sprint, but the Developers believe they can finish 8 and still meet the Sprint Goal. What is true?',['The Developers decide what they can forecast, in discussion with the PO','The PO decides the amount, because the PO is accountable for value','The stakeholders decide, because they are paying for the work','The Scrum Master decides, based on the velocity of the previous Sprint'],[0],'Through discussion with the PO, the Developers select what they can do in the Sprint.'],
+ [7,'m','Which TWO describe the Sprint? (Choose 2)',['It is a fixed-length event of one month or less','A new Sprint starts immediately after the previous one ends','Its length is extended when work is not finished','There is a planning break between Sprints'],[0,1],'Sprints are fixed length and run back to back.'],
+ [7,'s','A team wants to try a six-week Sprint to fit a big feature. What does Scrum say?',['Sprints are one month or less, so break the work down','It is fine if the PO agrees and the stakeholders are informed','It is allowed with stakeholder approval','It is allowed for large products with many dependencies'],[0],'A Sprint is never longer than one month.'],
+
+ [8,'s','What is the main outcome of a good Sprint Review?',['A shared understanding of progress and possible adaptations to the Product Backlog','A formal approval signed by the stakeholders that allows the Increment to be released','A status report for management that shows progress against the original plan and budget','Performance ratings for the individual Developers and the Scrum Master'],[0],'The Review is a working session about the outcome and what to do next.'],
+ [8,'t','Stakeholders attend the Sprint Review to give feedback on the Increment.',null,[0],'True. The Scrum Team and stakeholders collaborate on what was done and what to do next.'],
+ [8,'s','A team talks about how it collaborated, its tooling and its Definition of Done in order to improve next Sprint. Which event is this?',['Sprint Retrospective','Sprint Review','Sprint Planning','Daily Scrum'],[0],'The Retrospective is about improving quality and effectiveness.'],
+ [8,'s','A one-month Sprint ends. How long may the Sprint Retrospective take at most?',['3 hours','2 hours','5 hours','1 day'],[0],'Three hours is the maximum for a one-month Sprint.'],
+ [8,'s','Should the CEO attend the Sprint Retrospective?',['No, it is an event for the Scrum Team','Yes, all stakeholders attend so that they can hear the team’s feedback','Yes, the CEO may attend whenever they want to be informed','Only the Developers attend, without the PO and Scrum Master'],[0],'The Retrospective is for the Scrum Team.'],
+ [8,'s','How long may a Sprint Review take at most in a one-month Sprint?',['4 hours','6 hours','2 hours','8 hours'],[0],'Four hours is the maximum for a one-month Sprint.'],
+
+ [9,'s','Which describes an Increment?',['Usable work that meets the Definition of Done and is a step toward the Product Goal','Any work that one Developer has finished during the Sprint, whether or not it is usable','A partially working feature with known bugs that will be fixed in a later Sprint','The list of Product Backlog items that the Developers selected for the Sprint'],[0],'An Increment is usable and meets the Definition of Done.'],
+ [9,'t','Multiple Increments can be created within a Sprint.',null,[0],'True. Increments can be delivered during the Sprint, and each builds on the previous ones.'],
+ [9,'s','Which of these belongs to the Definition of Done?',['Quality criteria every Increment must meet, such as tested and documented','The list of features that must be delivered in this release','The acceptance criteria that the PO writes for a single backlog item','The Sprint Goal that the team agreed on in Sprint Planning'],[0],'The Definition of Done describes the quality an Increment must reach.'],
+ [9,'s','The company has a quality standard for all products. How does it relate to the Scrum Team’s Definition of Done?',['The team must follow it as a minimum and may add stricter criteria','The team may ignore it when its own Definition of Done is stricter','The Product Owner may lower it when a deadline is under pressure','It replaces the rules of the Scrum Guide for that organization'],[0],'Organizational standards are the minimum for the Definition of Done.'],
+ [9,'s','At the end of the Sprint one item is 95% done but fails the Definition of Done. What should the Scrum Team do?',['Not count it in the Increment and return it to the Product Backlog','Release it anyway and fix the remaining issues later','Show it in the Review as done, since it is almost finished','Lower the Definition of Done for this item so that it passes'],[0],'Only work that meets the Definition of Done is part of the Increment.'],
+ [9,'s','Three Scrum Teams build one product and each has its own Definition of Done. What is the problem?',['The Increment cannot be integrated consistently, so they need a shared Definition of Done','No problem, because autonomy of each team is the key principle in Scrum','Only the Product Owner should define it for all teams together, as the PO owns the product','Only the Scrum Masters need to agree on one, since they are responsible for the process'],[0],'Teams working on one product must share a Definition of Done.'],
+
+ [10,'s','Why does Scrum recommend a small team of ten or fewer?',['Smaller teams communicate better and are more productive','Larger teams cost more and need more managers','The Scrum Guide forbids more than five people','Managers can control them more easily'],[0],'Small teams communicate better and are more productive.'],
+ [10,'t','The Scrum Team as a whole is accountable for creating a valuable, useful Increment every Sprint.',null,[0],'True. The whole Scrum Team shares this accountability.'],
+ [10,'s','The Product Owner dictates tasks to individual Developers. What principle is violated?',['Developers are accountable for the Sprint plan and manage their own work','The PO must assign tasks, because the PO is accountable for the value','The Scrum Master assigns tasks to make sure everybody is busy','Only stakeholders may assign tasks, because they pay for the work'],[0],'Scrum Teams are self-managing. Developers decide how to do the work.'],
+ [10,'s','Which is a way the Scrum Master supports the Product Owner?',['Helping find techniques for Product Goal definition and Product Backlog management','Deciding the order of the Product Backlog when the PO is unsure','Accepting or rejecting the Increment at the end of every Sprint on behalf of the stakeholders','Setting the Product Goal on behalf of the Product Owner, together with the stakeholders'],[0],'The Scrum Master helps with techniques and stakeholder collaboration, not decisions.'],
+ [10,'s','Who must attend the Daily Scrum?',['The Developers (the PO and Scrum Master only when working on Sprint Backlog items)','Everyone, including all stakeholders who want to hear the status','Only the Scrum Master, who then reports to the Product Owner','Only the Product Owner, who then assigns the day’s work'],[0],'The Daily Scrum is for the Developers.'],
+ [10,'s','A team ignores several Scrum rules and nobody acts. Who is accountable for helping everyone understand and apply Scrum?',['The Scrum Master','The Product Owner','The Developers','The CEO'],[0],'The Scrum Master is accountable for establishing Scrum.'],
+
+ [11,'s','Which three pillars uphold empirical process control?',['Transparency, inspection and adaptation','Courage, focus and respect, the values of the team','Planning, execution and review, repeated in every Sprint','Value, risk and cost'],[0],'Empiricism rests on transparency, inspection and adaptation.'],
+ [11,'m','Which THREE values are listed in the Scrum Guide? (Choose 3)',['Commitment','Focus','Respect','Efficiency'],[0,1,2],'The five values are Commitment, Focus, Openness, Respect and Courage.'],
+ [11,'s','Which approach reflects empiricism?',['Make decisions based on what was observed and learned in real work','Decide based on a detailed up-front plan that was approved by management','Decide on the basis of seniority and experience of the decision maker','Avoid decisions until all data is in'],[0],'Empiricism means deciding from experience and observation.'],
+ [11,'s','Which of the following aligns with lean thinking in Scrum?',['Focus on the essentials and reduce waste','Maximize the utilization of every person so nobody sits idle','Document every decision and requirement in advance','Add more features to the product to be on the safe side'],[0],'Lean thinking reduces waste and focuses on the essentials.'],
+ [11,'t','Scrum is purposefully incomplete and only defines the parts required to implement Scrum theory.',null,[0],'True. Other practices are chosen by the Scrum Team and organization.'],
+ [11,'s','Which kind of problems is Scrum designed for?',['Complex, adaptive problems','Simple, repetitive tasks','Fixed, fully predictable projects','Only software projects'],[0],'Scrum helps people generate value through adaptive solutions for complex problems.'],
+
+ [0,'s','Which of the following is NOT an accountability of the Product Owner?',['Facilitating the Daily Scrum for the Developers','Ordering the Product Backlog items by value, risk and dependencies','Developing and communicating the Product Goal','Ensuring the Product Backlog is transparent'],[0],'The Daily Scrum is for the Developers. The PO’s accountabilities are the Product Goal, creating and communicating items, ordering and transparency.',2],
+ [0,'s','Which statement about the Product Owner is NOT true?',['The PO is a committee that decides by majority vote','The PO is one person who may represent the needs of many stakeholders','The PO may delegate work but stays accountable','The PO decides the order of the Product Backlog'],[0],'The Product Owner is one person, not a committee.',1],
+ [0,'m','Which TWO statements about the Product Owner are NOT true? (Choose 2)',['The PO assigns tasks to individual Developers','The PO is accountable for maximizing the value of the product','The PO must write every Product Backlog item personally and cannot delegate','The PO can cancel a Sprint'],[0,2],'Developers manage their own work, and the PO may delegate writing items while staying accountable.',3],
+ [0,'s','Which is NOT one of the eight Product Owner stances in The Professional Product Owner?',['Project Manager','Visionary','Collaborator','Experimenter'],[0],'The stances are visionary, collaborator, customer representative, decision maker, experimenter, influencer, communicator and leader.',4],
+
+ [1,'s','Which is NOT a purpose of a product vision?',['To list every feature with its delivery date','To inspire and align the people who work on and use the product','To describe a desired future for the product','To guide decisions about what to build and what not to build'],[0],'A vision describes purpose and direction, not a feature list with dates.',7],
+ [1,'s','Which statement about product vision and strategy is FALSE?',['A vision should stay unchanged whatever the evidence says','Strategy describes how the vision will be pursued and what makes the product stand out','A vision should be shared with stakeholders and the whole Scrum Team','A vision can be updated when evidence demands it'],[0],'A vision is stable but not frozen. New evidence can lead to changes.',13],
+ [1,'m','Which TWO are NOT signs of a healthy product strategy? (Choose 2)',['Nobody can say who the product is for','The strategy explains how the product stands out','The strategy is revisited as the market changes','The strategy is a secret known by one person only'],[0,3],'A healthy strategy is clear, shared and adjusted when needed.',12],
+
+ [2,'s','Which statement about the Product Goal is NOT true?',['The team works toward several Product Goals at the same time','It is the commitment of the Product Backlog and gives it direction','It is a long-term objective for the Scrum Team','The team fulfills or abandons it before taking on the next'],[0],'The Scrum Team works toward one Product Goal at a time.',15],
+ [2,'s','Which is NOT a good use of a roadmap?',['A fixed contract of features and dates for stakeholders','A view of the direction and the outcomes the team intends to achieve','A basis for conversations with stakeholders about what comes next','A tool that is updated regularly as the team learns more'],[0],'A roadmap shows direction, and treating it as a fixed contract removes the ability to adapt.',17],
+ [2,'m','Which TWO statements about the Product Goal are NOT true? (Choose 2)',['It is created by the Developers alone','It describes a future state of the product','It must be reached within a single Sprint','It gives the Scrum Team something to plan against'],[0,2],'The Product Goal is a long-term objective for the whole Scrum Team, not a one-Sprint target.',18],
+
+ [3,'s','Which statement about the Product Backlog is NOT true?',['It is complete once the first Sprint starts','It is ordered','It is emergent','It is the single source of work for the Scrum Team'],[0],'The Product Backlog is never complete. It evolves with the product.',23],
+ [3,'s','Which is NOT a valid factor when ordering the Product Backlog?',['Which stakeholder pushes the hardest','The expected value of the item for customers','The risk that the item carries for the product','Dependencies'],[0],'Value, risk, dependencies and learning drive ordering, not pressure.',25],
+ [3,'m','Which TWO statements about Product Backlog refinement are NOT true? (Choose 2)',['It is a mandatory event with a fixed agenda','It is an ongoing activity','It adds detail, estimates and order','It happens only before the first Sprint'],[0,3],'Refinement is an ongoing activity, not a formal event.',24],
+ [3,'s','Which action would be INCORRECT for a Product Owner with a bloated Product Backlog?',['Keep every old item forever to be safe','Remove items that will no longer add value','Keep the top items clear and small','Make the backlog transparent'],[0],'A lean, relevant backlog keeps the work transparent.',27],
+
+ [4,'s','Which of the following is NOT an outcome measure?',['Story points completed','Customer satisfaction','Product usage','Customer retention'],[0],'Story points measure output, not the outcome for customers.',34],
+ [4,'s','Which statement about Evidence-Based Management is NOT true?',['Velocity is the best measure of value delivered to customers','Current Value is the value delivered to customers today','Unrealized Value is the potential value not yet captured','Ability to Innovate is the capacity to deliver new capabilities'],[0],'Velocity is an output measure, not a measure of value.',33],
+ [4,'m','Which TWO pairings of a metric and a Key Value Area are INCORRECT? (Choose 2)',['Release frequency: Current Value','Customer satisfaction: Current Value','Defect trend: Ability to Innovate','Lead time: Unrealized Value'],[0,3],'Release frequency and lead time belong to Time-to-Market.',31],
+
+ [5,'s','Which is NOT a good way for the Product Owner to handle conflicting stakeholder demands?',['Follow whoever has the highest job title without discussion','Listen to the reasoning of each stakeholder before deciding','Decide based on value and explain the decision','Keep the Product Backlog transparent so everyone sees the result'],[0],'The PO listens to everyone and decides based on value.',37],
+ [5,'s','Which statement about stakeholders is FALSE?',['Stakeholders are members of the Scrum Team','Stakeholders include users and customers','Stakeholders give feedback in the Sprint Review','Stakeholders can influence the Product Owner'],[0],'Stakeholders are outside the Scrum Team.',35],
+ [5,'m','Which TWO are NOT appropriate responses to an executive demanding fixed scope and date? (Choose 2)',['Promise it to keep the peace','Explain the uncertainty and offer a forecast','Refuse to talk about it','Show progress every Sprint with a working Increment'],[0,2],'Transparency and evidence build trust, while promises and refusals do not.',41],
+
+ [6,'s','Which is NOT a characteristic of a good experiment?',['It guarantees the expected result','It starts with a hypothesis','It has measurable success criteria','It teaches the team something'],[0],'An experiment tests a hypothesis, so the result cannot be guaranteed.',45],
+ [6,'s','Which statement about an MVP is NOT true?',['It is a low-quality product','It helps validate assumptions','It is the smallest thing that enables learning','It is released to real users'],[0],'An MVP is about learning, not low quality.',44],
+ [6,'m','Which TWO statements are NOT true about value and output? (Choose 2)',['Shipping more features always means more customer value','Output and outcome are the same thing','Evidence from real usage shows whether value was created','An unused feature is a useful learning'],[0,1],'Output is not outcome, and more features do not always mean more value.',48],
+
+ [7,'s','Which is NOT a topic of Sprint Planning?',['Who was late to the Daily Scrum','Why this Sprint is valuable','What can be done this Sprint','How the chosen work will get done'],[0],'Sprint Planning covers why, what and how.',49],
+ [7,'s','Which statement about the Sprint Goal is FALSE?',['The Developers may change it mid-Sprint when they prefer another goal','It is the commitment of the Sprint Backlog and gives the Sprint its focus','It is a single objective for the Sprint','It is crafted by the whole Scrum Team during Sprint Planning'],[0],'The Sprint Goal does not change during the Sprint.',52],
+ [7,'s','Which statement about Sprints is NOT true?',['A Sprint can last up to six weeks','Sprints have a fixed length','A new Sprint starts right after the previous one','They are one month or less'],[0],'A Sprint is one month or less.',55],
+ [7,'m','Which TWO statements about Sprint Planning are NOT true? (Choose 2)',['The Product Owner alone decides how much will be done','It has a maximum timebox of 8 hours for a one-month Sprint','The Scrum Team collaborates on the Sprint Goal','Only the Scrum Master crafts the Sprint Backlog'],[0,3],'Developers forecast what they can do, and the Developers create the Sprint Backlog.',53],
+
+ [8,'s','Which statement about the Sprint Review is NOT true?',['It is a one-way demo without discussion','It is a working session of the Scrum Team and stakeholders','Stakeholders give feedback on the Increment','The Product Backlog may be adjusted'],[0],'The Sprint Review is a working session, not a one-way demo.',57],
+ [8,'s','Which is NOT a purpose of the Sprint Retrospective?',['Presenting the Increment to stakeholders for approval','Identifying improvements to the way the team works','Discussing how the work went during the last Sprint','Planning ways to increase quality and effectiveness'],[0],'The Increment is inspected in the Sprint Review. The Retrospective is about improving the way of working.',58],
+ [8,'m','Which TWO statements about the events are NOT true? (Choose 2)',['The Retrospective is for all stakeholders','The Review is a working session with stakeholders','The Retrospective lasts at most 3 hours for a one-month Sprint','The Review is only a status meeting'],[0,3],'The Retrospective is for the Scrum Team, and the Review is more than a status meeting.',60],
+
+ [9,'s','Which statement about the Definition of Done is NOT true?',['The Product Owner may lower it near the end of a Sprint to release more','It is the commitment for the Increment and describes its quality','It creates transparency about the quality of the Increment','Teams working on the same product share one Definition of Done'],[0],'The Definition of Done is a quality commitment that is not lowered to fit more work.',66],
+ [9,'s','Which statement about an Increment is NOT correct?',['It may be released only after the Sprint Review','It is usable by the stakeholders','It must meet the Definition of Done','Multiple Increments can be created within a single Sprint'],[0],'Increments can be delivered during the Sprint, and the Review is not a gate for release.',63],
+ [9,'m','Which TWO reactions to work that fails the Definition of Done are INCORRECT? (Choose 2)',['Release it anyway with a warning','Return it to the Product Backlog','Show it as done in the Sprint Review','Do not count it as part of the Increment'],[0,2],'Work that does not meet the Definition of Done is not part of the Increment.',66],
+
+ [10,'s','Which statement about a Scrum Team is NOT true?',['It has sub-teams for testing and design','It is cross-functional','It is self-managing','It has one Product Owner and one Scrum Master'],[0],'A Scrum Team has no sub-teams or hierarchies.',69],
+ [10,'s','Which is NOT a responsibility of the Scrum Master?',['Ordering the Product Backlog','Helping establish Scrum','Serving the Product Owner','Coaching the Developers in self-management'],[0],'Ordering the Product Backlog is the Product Owner’s accountability.',71],
+ [10,'s','Which statement about the Daily Scrum is FALSE?',['It is a status meeting for the Scrum Master','It is for the Developers','It lasts 15 minutes','It focuses on progress toward the Sprint Goal'],[0],'The Daily Scrum is for the Developers to inspect progress and adapt their plan.',72],
+ [10,'m','Which TWO statements about the Developers are NOT true? (Choose 2)',['The Product Owner assigns tasks to individual Developers','They create the Sprint Backlog','They are accountable for the quality of the Increment','They need the Scrum Master’s approval for how to do the work'],[0,3],'Developers manage their own work and decide how to do it.',70],
+
+ [11,'s','Which is NOT a Scrum Value?',['Efficiency','Courage','Respect','Openness'],[0],'The values are Commitment, Focus, Openness, Respect and Courage.',75],
+ [11,'s','Which statement about Scrum is FALSE?',['Scrum prescribes detailed procedures for every situation','Scrum is a lightweight framework with few rules','Scrum is purposefully incomplete on many practices','Scrum is meant for complex adaptive problems'],[0],'Scrum is purposefully incomplete and lightweight.',78],
+ [11,'m','Which TWO are NOT pillars of empiricism? (Choose 2)',['Transparency','Efficiency','Adaptation','Control'],[1,3],'The pillars are transparency, inspection and adaptation.',74]
+];
+const HALF=80;
+const NEGSTART=2*HALF;
+const concept=id=>id<HALF?id:id<NEGSTART?id-HALF:Q[id][6];
+const twin=id=>id<HALF?id+HALF:id<NEGSTART?id-HALF:Q[id][6];
+const VARS=(()=>{const v=[];for(let g=0;g<HALF;g++)v[g]=[g,g+HALF];for(let i=NEGSTART;i<Q.length;i++)v[Q[i][6]].push(i);return v})();
+const CHEAT=[
+ ['The PO is one person, accountable for maximizing the value of the product.','Accountabilities: Product Goal, creating and communicating items, ordering, transparency.','The PO may delegate work but stays accountable. Only the PO can cancel a Sprint.','Eight stances: visionary, collaborator, customer representative, decision maker, experimenter, influencer, communicator, leader.'],
+ ['A vision describes purpose and a desired future, not tasks or dates.','Strategy is the approach to reach the vision: who it is for and what makes it different.','Vision and strategy are shared, and updated when evidence changes.'],
+ ['The Product Goal is the commitment of the Product Backlog.','One Product Goal at a time: fulfill or abandon it before taking the next.','Sprint Goals are steps toward the Product Goal.','Roadmaps show direction and outcomes, not promises.'],
+ ['The Product Backlog is an emergent, ordered list and the single source of work.','The PO is accountable for it. Refinement is an ongoing activity, not an event.','Order by value, risk, dependencies and learning.','Top items are small and clear. Keep the backlog lean.'],
+ ['Four Key Value Areas: Current Value, Unrealized Value, Time-to-Market, Ability to Innovate.','Measure outcomes (satisfaction, usage), not output (velocity, features).','Technical debt and defects hurt Ability to Innovate.'],
+ ['Stakeholders are outside the Scrum Team and have an interest in the product.','The PO collaborates with them continuously, not only at the Sprint Review.','The PO decides the order after listening. Requests go through the Product Backlog.','Be transparent about uncertainty instead of promising fixed scope and dates.'],
+ ['Treat assumptions as hypotheses and test them with real users.','An MVP is the smallest thing that gives validated learning.','Output is not outcome. Many features can still deliver little value.','Release early and often to get real feedback.'],
+ ['Sprint Planning covers why (Sprint Goal), what and how. Max 8 hours for a one-month Sprint.','The whole Scrum Team crafts the Sprint Goal. Developers decide what they can forecast.','The Sprint Goal does not change during the Sprint. Scope can be renegotiated.','Sprints are one month or less, and a new one starts right after the last.'],
+ ['Sprint Review: inspect the outcome with stakeholders in a working session (max 4 hours).','Sprint Retrospective: the Scrum Team improves quality and effectiveness (max 3 hours).','The Review is not a release gate and not a status meeting.'],
+ ['An Increment is usable and meets the Definition of Done.','The Definition of Done is the commitment of the Increment. Without an organizational one, the Scrum Team creates it.','Work that does not meet it returns to the Product Backlog.','Teams on one product share one Definition of Done.'],
+ ['Scrum Team: one PO, one Scrum Master and Developers. 10 or fewer, no sub-teams or hierarchy.','Developers create the Sprint Backlog and manage their own work.','The Scrum Master is accountable for establishing Scrum and serves the PO, Developers and organization.','The Daily Scrum is a 15-minute event for the Developers.'],
+ ['Empiricism: knowledge comes from experience. Pillars: transparency, inspection, adaptation.','Lean thinking: reduce waste and focus on the essentials.','Values: Commitment, Focus, Openness, Respect, Courage.','Scrum is a lightweight, purposefully incomplete framework for complex problems.']
+];
+const STAGES=['🥚','🐣','🐥','🦖'];
+const TAUNTS=[
+ ['Back again! Missed me? 😏','Round two. Ready?','I’m baaack!'],
+ ['I grew a little. Can you still catch me?','Third time’s the charm?'],
+ ['I’m getting big… 😼','You’re closer than you think.'],
+ ['ROAR! Last chance to tame me 🦖','The big boss returns!']
+];
+
+/* ---------- state ---------- */
+const freshProg=()=>({q:{},th:{},best:0,xp:0,ex:[],day:{d:'',n:0},ds:0,dl:''});
+let prog=Object.assign(freshProg(),store.get(K.prog,{}));
+let settings=Object.assign({pass:85,sound:true,theme:'auto',count:10},store.get(K.set,{}));
+let round=store.get(K.round,null);
+if(round&&(!Array.isArray(round.log)||!round.mode||(round.mode==='exam'&&!round.ans)||(round.mode!=='exam'&&round.lives==null)))round=null;
+let summary=null,view='home',showSettings=false,showOver=false,cheat=null,resetArm=false,timer=null,ringAnim=false;
+
+const save=()=>{store.set(K.prog,prog);store.set(K.set,settings);if(round)store.set(K.round,round);else store.del(K.round)};
+const qp=id=>prog.q[id]||(prog.q[id]={box:0,streak:0,misses:0,tries:0,seen:0,won:false});
+const stageOf=p=>STAGES[Math.min(3,Math.max(0,p.misses-1))];
+const optsOf=q=>q[3]||['True','False'];
+const sameSet=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const wpick=(items,ws)=>{let r=Math.random()*ws.reduce((a,b)=>a+b,0);for(let i=0;i<items.length;i++){r-=ws[i];if(r<=0)return items[i]}return items[items.length-1]};
+const pick1=a=>a[Math.floor(Math.random()*a.length)];
+
+function strength(t){const a=(prog.th[t]||[]).slice(-15);return (a.reduce((x,y)=>x+y,0)+1)/(a.length+2)}
+function weakestThemes(n){
+  const withData=THEMES.map((_,i)=>i).filter(t=>(prog.th[t]||[]).length>=3);
+  if(!withData.length)return null;
+  return withData.sort((a,b)=>strength(a)-strength(b)).slice(0,n);
+}
+const GOAL=10;
+const dstr=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>dstr(new Date());
+const yesterday=()=>{const y=new Date();y.setDate(y.getDate()-1);return dstr(y)};
+function bumpDay(n){
+  const t=today();
+  if(prog.day.d!==t)prog.day={d:t,n:0};
+  const before=prog.day.n;prog.day.n+=n;
+  if(before<GOAL&&prog.day.n>=GOAL){prog.ds=prog.dl===yesterday()?prog.ds+1:1;prog.dl=t;return true}
+  return false;
+}
+const dayStreak=()=>(prog.dl===today()||prog.dl===yesterday())?prog.ds:0;
+function understood(){let n=0;for(let g=0;g<HALF;g++){const a=prog.q[g],b=prog.q[g+HALF];if(a&&b&&a.last===1&&b.last===1)n++}return n}
+function readiness(){
+  const answered=Object.values(prog.q).reduce((a,p)=>a+p.seen,0);
+  if(answered<15)return null;
+  const ss=THEMES.map((_,t)=>{const a=(prog.th[t]||[]).slice(-15),c=a.reduce((x,y)=>x+y,0);return {t,s:c/Math.max(a.length,10),n:a.length}});
+  const avg=ss.reduce((a,x)=>a+x.s,0)/ss.length;
+  const mn=Math.min(...ss.map(x=>x.s));
+  const u=understood();
+  const score=Math.round(100*(0.45*avg+0.25*mn+0.30*u/HALF));
+  const wk=ss.filter(x=>x.n>=3).sort((a,b)=>a.s-b.s)[0];
+  const ready=score>=85&&mn>=0.75;
+  return {score,ready,u,label:ready?'Ready for exam mode 🚀':score>=65?'Getting close 🌤️':'Not yet 🌱',weak:wk?wk.t:null,fresh:ss.filter(x=>x.n<10).length};
+}
+document.documentElement.removeAttribute('data-theme');
+function applyTheme(){const r=document.documentElement;if(settings.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme)}
+applyTheme();
+
+/* ---------- selection logic ---------- */
+function pickNext(r){
+  const due=Object.keys(r.due).filter(id=>r.due[id]<=0).map(Number);
+  while(due.length){
+    const id=due.shift();delete r.due[id];
+    if(!r.asked.includes(id))return id;
+    const t=twin(id);
+    if(!r.asked.includes(t)){r.tw[t]=true;return t}
+  }
+  const all=THEMES.map((_,i)=>i);
+  const ok=i=>!VARS[concept(i)].some(v=>r.asked.includes(v));
+  const avail=t=>Q.some((q,i)=>q[0]===t&&ok(i));
+  const cap=Math.max(2,Math.ceil(r.total*0.4));
+  const counts={};r.log.forEach(l=>{counts[l.t]=(counts[l.t]||0)+1});
+  const pool=r.themes&&r.themes.length?r.themes:all;
+  let cands=pool.filter(t=>avail(t)&&(counts[t]||0)<cap);
+  if(!cands.length)cands=pool.filter(avail);
+  if(!cands.length)cands=all.filter(avail);
+  if(!cands.length)return null;
+  const ws=cands.map(t=>r.weak?0.1+Math.pow(1-strength(t),2)*2.2:0.15+(1-strength(t))*1.2);
+  const t=wpick(cands,ws);
+  const ids=Q.map((_,i)=>i).filter(i=>Q[i][0]===t&&ok(i));
+  const qw=ids.map(i=>{const p=prog.q[i];if(!p||!p.seen)return 3;let w=[3,5,3.5,2,1.2,.8][p.box]||1;if(p.streak>=2)w=Math.min(w,1);return w});
+  return wpick(ids,qw);
+}
+
+/* ---------- round flow ---------- */
+const MAXL=3;
+function examOrder(){
+  const ids=[];
+  for(let g=0;g<HALF;g++){
+    const v=VARS[g],seen=v.map(i=>prog.q[i]?prog.q[i].seen:0),m=Math.min(...seen);
+    ids.push(pick1(v.filter((_,k)=>seen[k]===m)));
+  }
+  return shuffle(ids);
+}
+function startRound(mode,themes){
+  const r={mode,total:mode==='exam'?80:settings.count,log:[],asked:[],due:{},tw:{},themes:themes||null,weak:mode==='weak',streak:0,best:0,conq:0,lucky:0,solid:0,lives:MAXL,t0:Date.now()};
+  if(mode==='exam'){r.order=examOrder();r.ans={};r.flag={};r.ord={};r.i=0;r.endsAt=r.t0+3600*1000}
+  round=r;summary=null;view='quiz';showOver=false;
+  if(mode==='exam'){save();render();window.scrollTo(0,0);startTimer()}else present();
+}
+function present(){
+  const r=round;
+  const id=pickNext(r);
+  if(id==null){finish();return}
+  const q=Q[id],p=qp(id);
+  const n=optsOf(q).length;
+  const order=q[1]==='t'?[0,1]:shuffle([...Array(n).keys()]);
+  const had=p.misses>0&&p.streak<2;
+  r.cur={id,order,sel:[],done:false,ok:null,ev:null,had,twist:!!r.tw[id],taunt:had?pick1(TAUNTS[Math.min(3,p.misses-1)]):''};
+  if(!r.asked.includes(id))r.asked.push(id);
+  save();render();window.scrollTo(0,0);
+}
+function record(){
+  const r=round,c=r.cur,q=Q[c.id],p=qp(c.id),t=q[0];
+  const ok=sameSet(c.sel,q[4]);
+  c.ok=ok;c.done=true;c.life=false;
+  const oldStage=stageOf(p);
+  const tid=twin(c.id),tp=prog.q[tid];
+  p.seen++;p.tries++;p.last=ok?1:0;
+  let ev=null;
+  if(ok){
+    p.streak++;p.box=Math.min(5,p.box+1);r.streak++;
+    r.best=Math.max(r.best,r.streak);prog.best=Math.max(prog.best,r.streak);prog.xp+=10;
+    if(p.misses>0){
+      if(p.streak===2){ev={k:'defeated',tries:p.tries};p.won=true;r.conq++;prog.xp+=10}
+      else if(p.streak<2)ev={k:'progress'};
+    }
+    if(p.streak>=2)delete r.due[c.id];else if(p.misses>0)r.due[c.id]=3;
+    if(r.streak%5===0&&r.lives<MAXL){r.lives++;c.life=true}
+  }else{
+    p.streak=0;p.box=1;p.misses++;r.streak=0;r.lives--;
+    ev={k:p.misses===1?'appear':'evolve',from:oldStage,to:stageOf(p)};r.due[c.id]=2;
+  }
+  /* understanding check against the twin (same idea, different wording) */
+  c.tw=null;
+  if(tp&&tp.seen>0){
+    if(ok&&tp.last===1){c.tw='solid';r.solid++}
+    else if(!ok&&tp.last===1){c.tw='lucky';r.lucky++}
+    else if(ok&&tp.last===0)c.tw='both';
+  }
+  Object.keys(r.due).forEach(k=>{if(+k!==c.id)r.due[k]--});
+  if(ok&&!r.asked.includes(tid)&&r.due[tid]==null&&!(tp&&tp.last===1)&&r.total-r.log.length>4){r.due[tid]=3;r.tw[tid]=true}
+  prog.th[t]=((prog.th[t]||[]).concat(ok?1:0)).slice(-15);
+  r.log.push({id:c.id,t,ok,sel:c.sel.slice()});
+  c.ev=ev;c.over=r.lives<=0;
+  const goal=bumpDay(1);
+  if(ok){
+    beep([[660,0,.12],[880,.1,.16]]);haptic(15);
+    if(c.life)toast('❤️ Life won back!');
+    else if(goal)toast('📅 Daily goal reached!');
+    else if(r.streak>=3&&r.streak%3===0)toast('🔥 '+r.streak+' in a row!');
+  }else beep([[330,0,.2]]);
+  save();
+}
+function submitExam(){
+  const r=round;if(!r||r.mode!=='exam')return;
+  stopTimer();
+  let answered=0;
+  r.order.forEach((id,i)=>{
+    const q=Q[id],p=qp(id),sel=r.ans[i]||[],ok=sameSet(sel,q[4]);
+    if(sel.length)answered++;
+    p.seen++;p.tries++;p.last=ok?1:0;
+    if(ok){p.streak++;p.box=Math.min(5,p.box+1)}else{p.streak=0;p.box=1;p.misses++}
+    prog.th[q[0]]=((prog.th[q[0]]||[]).concat(ok?1:0)).slice(-15);
+    r.log.push({id,t:q[0],ok,sel,skipped:!sel.length});
+  });
+  const c=r.log.filter(l=>l.ok).length;
+  prog.ex=(prog.ex||[]).concat({p:Math.round(c/r.log.length*100),d:today()}).slice(-5);
+  prog.xp+=c*5;bumpDay(answered);
+  finishWith({mode:'exam',exam:true,log:r.log.slice(),best:0,conq:0,over:false,lucky:0,solid:0});
+}
+function finish(over){
+  const r=round;if(!r)return;
+  stopTimer();
+  finishWith({mode:r.mode,exam:false,log:r.log.slice(),best:r.best,conq:r.conq,over:!!over,lucky:r.lucky,solid:r.solid});
+}
+function finishWith(S){
+  summary=S;round=null;view='summary';showOver=false;ringAnim=true;
+  save();render();window.scrollTo(0,0);celebrate();
+}
+
+/* ---------- timer ---------- */
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const examLeft=()=>Math.max(0,Math.round((round.endsAt-Date.now())/1000));
+function paceText(){
+  const r=round,answered=r.order.filter((_,i)=>(r.ans[i]||[]).length).length;
+  const used=(Date.now()-r.t0)/3600000;
+  if(used<.08)return '';
+  return answered/80>=used-.05?'On pace ✅':'Speed up ⚡';
+}
+function startTimer(){stopTimer();timer=setInterval(tick,1000);tick()}
+function stopTimer(){if(timer){clearInterval(timer);timer=null}}
+function tick(){
+  if(!round||round.mode!=='exam'){stopTimer();return}
+  const left=examLeft();
+  const el=$('#tm');if(el)el.textContent='⏱ '+fmt(left);
+  const pe=$('#pace');if(pe)pe.textContent=paceText();
+  if(left<=0){stopTimer();submitExam()}
+}
+
+/* ---------- feedback helpers ---------- */
+let ac=null;
+function beep(seq){
+  if(!settings.sound)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    seq.forEach(([f,t,d])=>{
+      const o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+t;
+      o.type='triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.12,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+d);
+      o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+d+.05);
+    });
+  }catch(e){}
+}
+function haptic(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
+function toast(t){
+  const old=$('.toast');if(old)old.remove();
+  const d=document.createElement('div');d.className='toast';d.textContent=t;d.setAttribute('role','status');
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1700);
+}
+function confetti(emojis,count){
+  if(reduce)return;
+  const box=document.createElement('div');box.className='confetti';box.setAttribute('aria-hidden','true');
+  for(let i=0;i<count;i++){
+    const s=document.createElement('span');
+    s.textContent=pick1(emojis);
+    const dur=2.6+Math.random()*2.4;
+    s.style.cssText='left:'+(Math.random()*100)+'%;font-size:'+(18+Math.random()*22)+'px;animation-duration:'+dur+'s;animation-delay:'+(Math.random()*1.4)+'s;--dx:'+((Math.random()-.5)*160)+'px;--rot:'+((Math.random()-.5)*720)+'deg';
+    box.appendChild(s);
+  }
+  document.body.appendChild(box);
+  setTimeout(()=>box.remove(),7500);
+}
+function calc(){
+  const S=summary,total=S.log.length,correct=S.log.filter(l=>l.ok).length;
+  const pct=total?Math.round(correct/total*100):0;
+  const PASS=settings.pass;
+  const tier=pct===100?'perfect':pct>=PASS?'pass':pct>=PASS-10?'close':'not';
+  const by={};S.log.forEach(l=>{const b=by[l.t]||(by[l.t]={t:l.t,n:0,c:0});b.n++;if(l.ok)b.c++});
+  const th=Object.values(by).map(b=>Object.assign(b,{pct:Math.round(b.c/b.n*100)}));
+  return {total,correct,pct,PASS,tier,th};
+}
+function celebrate(){
+  const C=calc();
+  if(C.tier==='not'||summary.over)return;
+  if(C.tier==='close'){confetti(['✨','💪','⭐'],26);haptic(30);return}
+  haptic([80,40,80,40,160]);
+  beep([[523,0,.18],[659,.16,.18],[784,.32,.18],[1047,.5,.4]]);
+  confetti(C.tier==='perfect'?['🎉','🥳','✨','🏆','🎊','👑']:['🎉','🥳','✨','🏆','🎊'],C.tier==='perfect'?120:80);
+}
+
+/* ---------- views ---------- */
+function topbar(title,right){return '<header class="top"><h1>'+title+'</h1>'+(right||'')+'</header>'}
+const hearts=n=>'❤️'.repeat(Math.max(0,n))+'🖤'.repeat(Math.max(0,MAXL-n));
+
+function homeView(){
+  const lvl=Math.floor(prog.xp/150)+1;
+  const weakOK=!!weakestThemes(3);
+  const mins=Math.max(1,Math.round(settings.count*0.3));
+  const R=readiness();
+  const dn=prog.day.d===today()?prog.day.n:0;
+  let h=topbar('PSPO Practice Arena','<button class="iconbtn" data-a="settings" aria-label="Settings">⚙️</button>');
+  h+='<div class="hero"><h2>Tame the tough questions 🦖</h2><p>Quick rounds, friendly feedback. Missed questions keep coming back, and every idea is tested twice in different words.</p></div>';
+  if(round){
+    const examAns=round.mode==='exam'?round.order.filter((_,i)=>(round.ans[i]||[]).length).length:0;
+    const label=round.mode==='exam'?'Exam: '+examAns+' of 80 answered':(round.mode==='weak'?'Weak-themes round':'Round')+', question '+Math.min(round.log.length+1,round.total)+' of '+round.total;
+    h+='<div class="card resume"><h2>Pick up where you left off</h2><div>'+esc(label)+'</div><button class="btn" data-a="resume">Resume</button></div>';
+  }
+  h+='<div class="card"><h2>Exam readiness</h2>';
+  if(R){
+    const hint=R.ready?'Consistent on every theme. Time to try exam mode!':(R.fresh>0?'Only '+(THEMES.length-R.fresh)+' of '+THEMES.length+' themes have enough practice so far (about 10 answers each). Less practice only counts partly.':(R.weak!=null?'Next up: '+THEMES[R.weak].e+' '+esc(THEMES[R.weak].n):'Keep practicing across all themes.'));
+    h+='<div class="ready"><div class="big">'+R.score+'%</div><div style="flex:1"><div class="lab">'+R.label+'</div><div class="meter big"><i style="width:'+R.score+'%"></i></div></div></div><div class="muted small" style="margin-top:8px">'+hint+'</div>';
+    if(prog.ex.length)h+='<div class="muted small">Last exam: '+prog.ex[prog.ex.length-1].p+'% · best '+Math.max(...prog.ex.map(x=>x.p))+'%</div>';
+  }else h+='<div class="muted">Answer a few questions and your readiness score shows up here.</div>';
+  h+='</div>';
+  h+='<div class="card"><h2>Level</h2><div class="levels">'+
+     '<button class="lvl" aria-pressed="true" data-a="noop">PSPO I</button>'+
+     '<button class="lvl" disabled>PSPO II <small>soon</small></button>'+
+     '<button class="lvl" disabled>PSPO III <small>soon</small></button></div></div>';
+  h+='<div class="card"><div class="sliderbox"><h2 style="margin:0">Questions per round</h2><b id="cntv">'+settings.count+'</b></div>'+
+     '<input type="range" id="cnt" min="5" max="40" step="1" value="'+settings.count+'" aria-label="Questions per round">'+
+     '<div class="muted small" id="cntm" style="margin:2px 0 14px">About '+mins+' min · 3 ❤️ per round</div>'+
+     '<button class="btn" data-a="start">Start round 🚀</button>'+
+     '<div class="row" style="margin-top:10px"><button class="btn alt" data-a="weak"'+(weakOK?'':' disabled')+'>Weak themes 🔥</button><button class="btn '+(R&&R.ready?'sun':'alt')+'" data-a="exam">Exam mode ⏱️</button></div>'+
+     '<div class="muted small" style="margin-top:10px">A wrong answer costs a ❤️. Out of lives? Start the round again. A 5-streak wins one back. Exam mode: 80 questions, 60 minutes, no lives and no feedback until you submit.</div></div>';
+  h+='<div class="stats"><div class="stat"><b>'+prog.xp+'</b><span>XP · lvl '+lvl+'</span></div><div class="stat"><b>🔥 '+prog.best+'</b><span>best streak</span></div><div class="stat"><b>'+understood()+'/'+HALF+'</b><span>ideas understood</span></div><div class="stat"><b>📅 '+dayStreak()+'</b><span>today '+Math.min(dn,GOAL)+'/'+GOAL+'</span></div></div>';
+  h+='<div class="card"><h2>Your themes</h2>';
+  THEMES.forEach((T,t)=>{
+    const ids=Q.map((_,i)=>i).filter(i=>Q[i][0]===t);
+    const m=ids.filter(i=>prog.q[i]&&prog.q[i].streak>=2).length;
+    const n=(prog.th[t]||[]).length,s=strength(t);
+    const heat=n<3?'✨':s<.5?'🔥':s<.75?'🌤️':'🌱';
+    h+='<div class="trow"><div class="em">'+T.e+'</div><div class="nm">'+esc(T.n)+'<div class="meter"><i style="width:'+Math.round(m/ids.length*100)+'%"></i></div></div><button class="mini" data-a="cheat" data-t="'+t+'" aria-label="Cheat sheet: '+esc(T.n)+'">📝</button><div class="heat">'+heat+'</div></div>';
+  });
+  h+='<div class="muted small" style="margin-top:8px">🔥 needs work · 🌤️ getting there · 🌱 solid · ✨ new. Bars show mastered questions. Tap 📝 for a quick cheat sheet.</div></div>';
+  const shelf=THEMES.map((T,t)=>{
+    const ids=Q.map((_,i)=>i).filter(i=>Q[i][0]===t&&prog.q[i]&&prog.q[i].won);
+    return ids.length?'<div class="trow"><div class="em">'+T.e+'</div><div class="nm">'+esc(T.n)+'</div><div class="shelf">'+ids.slice(0,10).map(i=>stageOf(prog.q[i])).join('')+'</div></div>':'';
+  }).join('');
+  h+='<div class="card"><h2>Trophy shelf 🏆</h2>'+(shelf||'<div class="muted">Answer a stubborn question correctly twice in a row to defeat it and add it here.</div>')+'</div>';
+  h+='<div class="foot">Original practice questions, not official Scrum.org assessment questions. Themes follow The Professional Product Owner and the Scrum Guide. Progress is saved in this browser only.</div>';
+  return h;
+}
+
+const qhtml=t=>esc(t).replace(/\b(NOT|FALSE|INCORRECT)\b/g,'<b>$1</b>');
+function optionsHtml(q,order,sel,done,feedback){
+  const multi=q[1]==='m';
+  return order.map((real,i)=>{
+    const on=sel.includes(real),good=q[4].includes(real);
+    let cls='opt',mk='';
+    if(done&&feedback){
+      if(good){cls+=' ok';mk='✓'}else if(on){cls+=' miss';mk='✗'}else cls+=' dim';
+    }else if(on){cls+=' sel';mk=multi?'✓':'●'}
+    return '<button class="'+cls+'" data-a="pick" data-i="'+i+'"'+(multi?' aria-pressed="'+on+'"':'')+(done&&feedback?' disabled':'')+'><span class="mk '+(multi?'c':'r')+'" aria-hidden="true">'+mk+'</span><span>'+esc(optsOf(q)[real])+'</span></button>';
+  }).join('');
+}
+
+function quizView(){
+  const r=round,c=r.cur,q=Q[c.id],T=THEMES[q[0]],p=qp(c.id);
+  const multi=q[1]==='m',done=c.done;
+  const pos=Math.min(r.log.length+(done?0:1),r.total);
+  let h='<header class="top"><button class="iconbtn" data-a="home" aria-label="Back to home">✕</button><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+r.total+'" aria-valuenow="'+r.log.length+'"><i style="width:'+Math.round(r.log.length/r.total*100)+'%"></i></div><div class="meta hearts" aria-label="'+r.lives+' lives left">'+hearts(r.lives)+'</div></header>';
+  h+='<div class="muted small" style="margin:0 2px 10px">Question '+pos+' of '+r.total+' · 🔥 '+r.streak+'</div>';
+  h+='<div class="card"><span class="chip">'+T.e+' '+esc(T.n)+'</span>';
+  if(c.twist)h+='<div class="twist">🔁 Twist: same idea as an earlier question, new wording. Do you really get it?</div>';
+  if(c.had){
+    const dots=Math.min(2,p.streak);
+    h+='<div class="creature"><div class="cr" aria-hidden="true">'+stageOf(p)+'</div><div><b>Stubborn question</b><span>'+esc(c.taunt)+'</span><div class="dots" aria-label="'+dots+' of 2 correct in a row">'+'●'.repeat(dots)+'○'.repeat(2-dots)+'</div></div></div>';
+  }
+  h+='<p class="qtext">'+qhtml(q[2])+'</p><div class="opts">'+optionsHtml(q,c.order,c.sel,done,true)+'</div>';
+  if(done){
+    const ev=c.ev,L=[];
+    if(ev){
+      if(ev.k==='appear')L.push('A stubborn question hatched 🥚 Its twin pops up soon in new wording, and it returns in later rounds. Totally normal!');
+      else if(ev.k==='evolve')L.push('It evolved '+ev.from+' → '+ev.to+'. It keeps coming back, in new wording first, until you get it right twice in a row.');
+      else if(ev.k==='progress')L.push('One more correct answer in a row to defeat it. ●○');
+      else if(ev.k==='defeated')L.push('Defeated! 💥 Got it after '+ev.tries+' tries. Added to your trophy shelf 🏆');
+    }
+    if(c.tw==='solid')L.push('Understood from both angles ✨ You nailed the same idea in different words.');
+    else if(c.tw==='lucky')L.push('This is the same idea as one you got right before, so that one may have been a lucky guess 🍀 Worth a closer look!');
+    else if(c.tw==='both')L.push('Now you’ve got it from both angles 🎯');
+    if(c.life)L.push('❤️ Life won back with a 5-streak!');
+    if(c.over)L.push('Out of lives 💔 Let’s see what to focus on.');
+    h+='<div class="fb '+(c.ok?'good':'warn')+'" role="status"><h3>'+(c.ok?pick1(['Nice one! 🎯','Spot on! ✨','Correct! 🔥']):'Here’s the catch 🪝')+'</h3><p>'+esc(q[5])+'</p>'+(L.length?'<div class="ev">'+L.join('<br>')+'</div>':'')+'</div>';
+    h+='<div class="act"><button class="btn" data-a="cont">'+(c.over?'See results':r.log.length>=r.total?'See results 🏁':'Continue')+'</button></div>';
+  }else if(multi){
+    h+='<div class="act"><button class="btn" data-a="check"'+(c.sel.length?'':' disabled')+'>Check answer</button></div>';
+  }
+  h+='</div>';
+  return h;
+}
+
+function ordFor(r,i){
+  if(!r.ord[i]){const q=Q[r.order[i]];r.ord[i]=q[1]==='t'?[0,1]:shuffle([...Array(optsOf(q).length).keys()])}
+  return r.ord[i];
+}
+function examView(){
+  const r=round,i=r.i,q=Q[r.order[i]];
+  const sel=r.ans[i]||[],ord=ordFor(r,i);
+  const answered=r.order.filter((_,k)=>(r.ans[k]||[]).length).length;
+  let h='<header class="top"><button class="iconbtn" data-a="home" aria-label="Pause and go home">✕</button><div class="bar"><i style="width:'+Math.round(answered/80*100)+'%"></i></div><div class="meta"><span id="tm">⏱ '+fmt(examLeft())+'</span></div></header>';
+  h+='<div class="muted small" style="margin:0 2px 10px">Question '+(i+1)+' of 80 · '+answered+' answered · <span id="pace">'+paceText()+'</span></div>';
+  h+='<div class="card"><div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="flagbtn" data-a="flag" aria-pressed="'+!!r.flag[i]+'">🚩 '+(r.flag[i]?'Flagged':'Flag')+'</button></div>';
+  h+='<p class="qtext">'+qhtml(q[2])+'</p><div class="opts">'+optionsHtml(q,ord,sel,false,false)+'</div>';
+  h+='<div class="nav"><button class="btn alt" data-a="prev"'+(i===0?' disabled':'')+'>Back</button><button class="btn" data-a="nextq">'+(i<79?'Next':'Review')+'</button></div>';
+  h+='<button class="btn alt" data-a="overview" style="margin-top:10px">Overview and submit</button></div>';
+  return h;
+}
+function overviewSheet(){
+  const r=round;
+  const un=r.order.filter((_,k)=>!(r.ans[k]||[]).length).length;
+  const fl=Object.keys(r.flag).filter(k=>r.flag[k]).length;
+  let h='<div class="scrim" data-a="scrim"><div class="panel" role="dialog" aria-label="Exam overview"><div class="row" style="align-items:center"><h2>Overview</h2><button class="iconbtn" data-a="close" aria-label="Close" style="flex:none;margin-left:auto">✕</button></div>';
+  h+='<div class="muted small">Tap a number to jump there. Filled means answered, 🚩 means flagged.</div><div class="grid">';
+  for(let k=0;k<80;k++){
+    const a=(r.ans[k]||[]).length;
+    h+='<button class="gq'+(a?' a':'')+(r.flag[k]?' f':'')+(k===r.i?' cur':'')+'" data-a="goto" data-i="'+k+'" aria-label="Question '+(k+1)+(a?', answered':', not answered')+(r.flag[k]?', flagged':'')+'">'+(k+1)+'</button>';
+  }
+  h+='</div><div class="small" style="margin-bottom:12px"><b>'+un+'</b> unanswered · <b>'+fl+'</b> flagged · '+fmt(examLeft())+' left</div><button class="btn sun" data-a="submit">Submit exam 🏁</button><button class="btn alt" data-a="close" style="margin-top:10px">Keep working</button></div></div>';
+  return h;
+}
+function cheatSheet(){
+  const T=THEMES[cheat];
+  return '<div class="scrim" data-a="scrim"><div class="panel cheat" role="dialog" aria-label="Cheat sheet"><div class="row" style="align-items:center"><h2>'+T.e+' '+esc(T.n)+'</h2><button class="iconbtn" data-a="close" aria-label="Close" style="flex:none;margin-left:auto">✕</button></div><ul style="padding-left:20px;margin:12px 0">'+CHEAT[cheat].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="muted small">Go deeper: '+esc(T.r)+'</div></div></div>';
+}
+
+function summaryView(){
+  const S=summary,C=calc(),over=!!S.over;
+  const {pct,PASS,tier,total,correct}=C;
+  const circ=2*Math.PI*54;
+  const ang=PASS/100*2*Math.PI-Math.PI/2;
+  const x1=70+46*Math.cos(ang),y1=70+46*Math.sin(ang),x2=70+64*Math.cos(ang),y2=70+64*Math.sin(ang);
+  const need=Math.ceil(PASS*80/100);
+  const head=over?'Out of lives 💔':{perfect:'Flawless! 👑',pass:'You passed! 🎓',close:'So close! 💪',not:'Keep going, you’re getting there 🌱'}[tier];
+  let sub;
+  if(over)sub='You made it through '+total+' question'+(total===1?'':'s')+'. Missed ones come back until they stick, so go again!';
+  else if(tier==='perfect'||tier==='pass')sub='That clears the '+PASS+'% pass line.';
+  else sub=(PASS-pct)+'% to go to reach the '+PASS+'% pass line.';
+  const label=S.exam?'Exam result':over?'Round over':'Round result';
+  const note=S.exam?'The real exam needs about '+need+' of 80 correct ('+PASS+'%).':'Short rounds are a guide. The real pass or fail check is exam mode with 80 questions.';
+  let h=topbar('Results','<button class="iconbtn" data-a="home" aria-label="Home">🏠</button>');
+  h+='<div class="card sum"><span class="tag">'+label+'</span>';
+  if(!over&&(tier==='perfect'||tier==='pass'))h+='<div class="trophy" aria-hidden="true">🏆</div>';
+  h+='<div class="ringwrap"><svg class="ring" viewBox="0 0 140 140" role="img" aria-label="'+pct+' percent, pass line '+PASS+' percent"><circle class="trk" cx="70" cy="70" r="54"/><circle class="prg" id="ringp" cx="70" cy="70" r="54" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'" transform="rotate(-90 70 70)"/><line class="pass" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/></svg><div class="ringtxt"><b>'+pct+'%</b><span>'+correct+' / '+total+'</span></div></div>';
+  h+='<h2 class="verdict">'+head+'</h2><div>'+sub+'</div><div class="muted small" style="margin-top:6px">The yellow tick on the ring marks the pass line. '+note+'</div>';
+  const won=[];Object.keys(prog.q).forEach(i=>{if(prog.q[i].won)won.push(stageOf(prog.q[i]))});
+  if(!over&&(tier==='pass'||tier==='perfect')&&won.length)h+='<div class="parade" aria-label="Your defeated creatures cheer"><div>'+won.slice(0,8).join(' ')+' 📣</div></div>';
+  if(S.solid||S.lucky)h+='<div class="small" style="margin-top:10px">🎯 Understood from both angles: <b>'+(S.solid||0)+'</b> · 🍀 Possible lucky guesses: <b>'+(S.lucky||0)+'</b></div>';
+  h+='<div class="row" style="margin-top:12px"><div class="stat"><b>🔥 '+S.best+'</b><span>best streak</span></div><div class="stat"><b>💥 '+S.conq+'</b><span>defeated</span></div></div></div>';
+
+  const enough=C.th.filter(t=>t.n>=3).sort((a,b)=>a.pct-b.pct);
+  const few=C.th.filter(t=>t.n<3);
+  h+='<div class="card"><h2>Score by theme</h2>';
+  enough.forEach(t=>{
+    h+='<div class="brow"><div class="hd"><span>'+THEMES[t.t].e+' '+esc(THEMES[t.t].n)+'</span><span>'+t.pct+'% <span class="muted">('+t.c+'/'+t.n+')</span></span></div><div class="pbar"><i class="'+(t.pct>=PASS?'p':'')+'" style="width:'+t.pct+'%"></i><u style="left:calc('+PASS+'% - 1px)"></u></div></div>';
+  });
+  if(!enough.length)h+='<div class="muted">Not enough answers per theme yet. Try a longer round to see theme percentages.</div>';
+  if(few.length)h+='<div class="muted small" style="margin-top:10px">Not enough data yet: '+few.map(t=>THEMES[t.t].e+' '+esc(THEMES[t.t].n)).join(', ')+'.</div>';
+  h+='</div>';
+
+  const weak=enough.filter(t=>t.pct<PASS).slice(0,3);
+  h+='<div class="card focus"><h2>Focus on these 🎯</h2>';
+  if(weak.length){
+    h+='<ul class="plain">'+weak.map(t=>'<li><b>'+THEMES[t.t].e+' '+esc(THEMES[t.t].n)+'</b> · '+t.pct+'%<div class="muted small">Reread: '+esc(THEMES[t.t].r)+'</div><button class="flagbtn" style="margin-top:6px" data-a="cheat" data-t="'+t.t+'">📝 Cheat sheet</button></li>').join('')+'</ul><div class="muted small" style="margin-top:8px">These themes will show up more often in your next rounds.</div>';
+  }else h+='<div>Nothing below the pass line in this round 🌱 Keep rotating themes to stay sharp.</div>';
+  h+='</div>';
+
+  const missed=S.log.filter(l=>!l.ok);
+  if(missed.length){
+    h+='<div class="card"><details><summary>Review missed questions ('+missed.length+')</summary>'+missed.map(l=>{
+      const q=Q[l.id];
+      return '<div class="miss-i"><b>'+esc(q[2])+'</b><div>Answer: '+esc(q[4].map(i=>optsOf(q)[i]).join(' / '))+'</div><div class="muted">'+esc(q[5])+'</div></div>';
+    }).join('')+'</details></div>';
+  }
+  h+='<div class="row"><button class="btn" data-a="weakend">Practice weak themes 🔥</button><button class="btn alt" data-a="'+(S.exam?'exam':'start')+'">'+(S.exam?'Another exam':'Play again')+'</button></div>';
+  return h;
+}
+
+function settingsSheet(){
+  let h='<div class="scrim" data-a="scrim"><div class="panel" role="dialog" aria-label="Settings"><div class="row" style="align-items:center"><h2>Settings</h2><button class="iconbtn" data-a="close" aria-label="Close" style="flex:none;margin-left:auto">✕</button></div>';
+  h+='<div class="srow"><b>Pass mark</b><div class="seg"><button data-a="pass" data-v="85" aria-pressed="'+(settings.pass===85)+'">85% (PSPO I)</button><button data-a="pass" data-v="80" aria-pressed="'+(settings.pass===80)+'">80%</button></div><div class="muted small" style="margin-top:6px">Check the current official figure on the Scrum.org assessment page.</div></div>';
+  h+='<div class="srow"><b>Sound</b><div class="seg"><button data-a="sound" data-v="1" aria-pressed="'+settings.sound+'">On</button><button data-a="sound" data-v="0" aria-pressed="'+!settings.sound+'">Muted</button></div></div>';
+  h+='<div class="srow"><b>Look</b><div class="seg"><button data-a="theme" data-v="auto" aria-pressed="'+(settings.theme==='auto')+'">Auto</button><button data-a="theme" data-v="light" aria-pressed="'+(settings.theme==='light')+'">Light</button><button data-a="theme" data-v="dark" aria-pressed="'+(settings.theme==='dark')+'">Dark</button></div></div>';
+  h+='<div class="srow"><button class="btn alt" data-a="reset">'+(resetArm?'Tap again to erase all progress':'Reset progress')+'</button></div>';
+  h+='<div class="foot" style="margin-top:0">Original practice questions, not official Scrum.org questions. Confetti turns into a calm trophy screen if your device is set to reduce motion.</div></div></div>';
+  return h;
+}
+
+function render(){
+  const app=$('#app');
+  let h=view==='quiz'&&round?(round.mode==='exam'?examView():round.cur?quizView():homeView()):view==='summary'&&summary?summaryView():homeView();
+  if(showSettings)h+=settingsSheet();
+  if(showOver&&round&&round.mode==='exam')h+=overviewSheet();
+  if(cheat!=null)h+=cheatSheet();
+  app.innerHTML=h;
+  if(view==='summary'&&summary){
+    const el=$('#ringp');
+    if(el){
+      const circ=2*Math.PI*54,off=circ*(1-calc().pct/100);
+      if(reduce||!ringAnim){el.style.transition='none';el.style.strokeDashoffset=off}
+      else{ringAnim=false;requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.strokeDashoffset=off}))}
+    }
+  }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-a]');if(!el)return;
+  const a=el.dataset.a;
+  const closeAll=()=>{showSettings=false;showOver=false;cheat=null;resetArm=false;render()};
+  if(a==='scrim'){if(e.target===el)closeAll();return}
+  const r=round;
+  const top=()=>window.scrollTo(0,0);
+  switch(a){
+    case 'start':startRound('practice');break;
+    case 'weak':{const w=weakestThemes(3);if(w)startRound('weak',w);break}
+    case 'weakend':{
+      const C=calc();
+      const w=C.th.filter(t=>t.n>=3&&t.pct<C.PASS).sort((x,y)=>x.pct-y.pct).slice(0,3).map(t=>t.t);
+      startRound('weak',w.length?w:weakestThemes(3));break}
+    case 'exam':startRound('exam');break;
+    case 'resume':
+      if(!r)break;
+      view='quiz';
+      if(r.mode!=='exam'&&!r.cur)present();else{render();top()}
+      if(r.mode==='exam')startTimer();
+      break;
+    case 'home':stopTimer();view='home';save();render();top();break;
+    case 'pick':{
+      if(!r)break;
+      if(r.mode==='exam'){
+        const q=Q[r.order[r.i]],real=ordFor(r,r.i)[+el.dataset.i],cur=r.ans[r.i]||[];
+        r.ans[r.i]=q[1]==='m'?(cur.includes(real)?cur.filter(x=>x!==real):cur.concat(real)):[real];
+        save();render();break;
+      }
+      const c=r.cur;if(!c||c.done)break;
+      const q=Q[c.id],real=c.order[+el.dataset.i];
+      if(q[1]==='m'){c.sel=c.sel.includes(real)?c.sel.filter(x=>x!==real):c.sel.concat(real);save();render()}
+      else{c.sel=[real];record();render()}
+      break}
+    case 'check':if(r&&r.cur&&r.cur.sel.length&&!r.cur.done){record();render()}break;
+    case 'cont':
+      if(!r||!r.cur||!r.cur.done)break;
+      if(r.cur.over)finish(true);else if(r.log.length>=r.total)finish();else present();
+      break;
+    case 'flag':if(r&&r.mode==='exam'){r.flag[r.i]=!r.flag[r.i];save();render()}break;
+    case 'prev':if(r&&r.mode==='exam'&&r.i>0){r.i--;save();render();top()}break;
+    case 'nextq':if(r&&r.mode==='exam'){if(r.i<79){r.i++;save();render();top()}else{showOver=true;render()}}break;
+    case 'overview':if(r&&r.mode==='exam'){showOver=true;render()}break;
+    case 'goto':if(r&&r.mode==='exam'){r.i=+el.dataset.i;showOver=false;save();render();top()}break;
+    case 'submit':if(r&&r.mode==='exam'){showOver=false;submitExam()}break;
+    case 'cheat':cheat=+el.dataset.t;render();break;
+    case 'settings':showSettings=true;render();break;
+    case 'close':closeAll();break;
+    case 'pass':settings.pass=+el.dataset.v;save();render();break;
+    case 'sound':settings.sound=el.dataset.v==='1';save();render();if(settings.sound)beep([[660,0,.1]]);break;
+    case 'theme':settings.theme=el.dataset.v;applyTheme();save();render();break;
+    case 'reset':
+      if(!resetArm){resetArm=true;render()}
+      else{prog=freshProg();round=null;summary=null;resetArm=false;showSettings=false;view='home';stopTimer();save();render()}
+      break;
+  }
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='cnt'){
+    settings.count=+e.target.value;
+    $('#cntv').textContent=settings.count;
+    $('#cntm').textContent='About '+Math.max(1,Math.round(settings.count*.3))+' min · 3 ❤️ per round';
+    store.set(K.set,settings);
+  }
+});
+
+render();
+if(round&&round.mode==='exam'&&round.endsAt<=Date.now()){submitExam()}
+})();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./sw.js').then(function(reg){
+      document.addEventListener('visibilitychange',function(){if(!document.hidden)reg.update().catch(function(){})});
+    }).catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
