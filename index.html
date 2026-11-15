@@ -145,9 +145,6 @@ summary{cursor:pointer;font-weight:800;padding:8px 0;min-height:44px;display:fle
 .srow{margin:16px 0}
 .srow>b{display:block;margin-bottom:8px}
 
-.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:80}
-.confetti span{position:absolute;top:-8vh;animation:fall linear forwards;will-change:transform}
-
 .hearts{font-size:18px;letter-spacing:2px;white-space:nowrap;min-width:78px}
 .ready{display:flex;gap:14px;align-items:center}
 .ready .big{font-family:'Fredoka',sans-serif;font-size:46px;line-height:1;color:var(--brand)}
@@ -208,7 +205,6 @@ button.trow{width:100%;text-align:left}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes wob{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
 @keyframes bounce{0%{transform:scale(0) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
-@keyframes fall{to{transform:translate3d(var(--dx),115vh,0) rotate(var(--rot))}}
 @keyframes march{from{left:-100%}to{left:100%}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -710,19 +706,6 @@ function beep(seq){
   }catch(e){}
 }
 function haptic(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
-function confetti(emojis,count){
-  if(reduce)return;
-  const box=document.createElement('div');box.className='confetti';box.setAttribute('aria-hidden','true');
-  for(let i=0;i<count;i++){
-    const s=document.createElement('span');
-    s.textContent=pick1(emojis);
-    const dur=2.6+Math.random()*2.4;
-    s.style.cssText='left:'+(Math.random()*100)+'%;font-size:'+(18+Math.random()*22)+'px;animation-duration:'+dur+'s;animation-delay:'+(Math.random()*1.4)+'s;--dx:'+((Math.random()-.5)*160)+'px;--rot:'+((Math.random()-.5)*720)+'deg';
-    box.appendChild(s);
-  }
-  document.body.appendChild(box);
-  setTimeout(()=>box.remove(),7500);
-}
 function calc(){
   const S=summary,total=S.log.length,correct=S.log.filter(l=>l.ok).length;
   const pct=total?Math.round(correct/total*100):0;
@@ -735,10 +718,9 @@ function calc(){
 function celebrate(){
   const C=calc();
   if(C.tier==='not'||summary.over)return;
-  if(C.tier==='close'){confetti(['✨','💪','⭐'],26);haptic(30);return}
+  if(C.tier==='close'){haptic(30);return}
   haptic([80,40,80,40,160]);
   beep([[523,0,.18],[659,.16,.18],[784,.32,.18],[1047,.5,.4]]);
-  confetti(C.tier==='perfect'?['🎉','🥳','✨','🏆','🎊','👑']:['🎉','🥳','✨','🏆','🎊'],C.tier==='perfect'?120:80);
 }
 
 /* ---------- views ---------- */
@@ -956,7 +938,6 @@ function render(){
   if(showOver&&round&&round.mode==='exam')h+=overviewSheet();
   if(cheat!=null)h+=cheatSheet();
   app.innerHTML=h;
-  if(view!=='summary'){const cf=$('.confetti');if(cf)cf.remove()}
   if(view==='summary'&&summary){
     const el=$('#ringp');
     if(el){
