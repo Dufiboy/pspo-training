@@ -1,12 +1,12 @@
 {
-  "name": "PSPO Practice Arena",
+  "name": "PSPO Training",
   "short_name": "PSPO",
   "description": "Practice for the Scrum.org PSPO I exam",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#13112b",
+  "background_color": "#DDF5EA",
   "theme_color": "#5340d6",
   "icons": [
     {
