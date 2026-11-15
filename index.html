@@ -12,7 +12,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
-<title>PSPO Practice Arena</title>
+<title>PSPO Training</title>
+<script>try{var t=JSON.parse(localStorage.getItem('pspo1.settings')||'{}').theme;if(t&&t!=='auto')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -49,7 +50,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;-webki
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
 #app{max-width:640px;margin:0 auto;padding:0 16px 40px}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--bg);display:flex;align-items:center;gap:12px;padding:12px 0}
-.top h1{font-size:22px;flex:1}
+.top h1{font-size:22px;flex:1;min-width:0}
 .iconbtn{width:44px;height:44px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none}
 .card{background:var(--surface);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
 .card h2{font-size:19px;margin-bottom:10px}
@@ -62,14 +63,6 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
 .btn.sun{background:var(--sun);color:var(--sun-ink)}
 .row{display:flex;gap:10px}
 .row>*{flex:1}
-.hero{padding:6px 0 18px}
-.hero h2{font-size:34px;letter-spacing:-.01em}
-.hero p{margin:8px 0 0;color:var(--muted);max-width:34ch}
-.levels{display:flex;gap:8px;flex-wrap:wrap}
-.lvl{padding:10px 16px;border-radius:999px;background:var(--surface2);font-weight:800;min-height:44px}
-.lvl[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
-.lvl[disabled]{opacity:.55;cursor:default}
-.lvl small{font-weight:700;opacity:.85;margin-left:4px}
 .sliderbox{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
 .sliderbox b{font-family:'Fredoka',sans-serif;font-size:34px;color:var(--brand)}
 input[type=range]{width:100%;height:44px;accent-color:var(--brand);margin:0}
@@ -81,12 +74,13 @@ input[type=range]{width:100%;height:44px;accent-color:var(--brand);margin:0}
 .trow:first-of-type{border-top:0}
 .trow .em{font-size:22px;width:30px;text-align:center}
 .trow .nm{flex:1;min-width:0;font-weight:700;font-size:15px;line-height:1.25}
-.meter{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:5px}
+.meter{display:block;height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:5px}
 .meter i{display:block;height:100%;background:var(--good);border-radius:99px}
 .heat{font-size:20px;width:28px;text-align:center}
 .shelf{display:flex;flex-wrap:wrap;gap:4px;font-size:24px}
-.resume{background:var(--sun);color:var(--sun-ink)}
-.resume .btn{background:var(--sun-ink);color:var(--sun);margin-top:10px}
+.resume{background:var(--sun);color:var(--sun-ink);display:flex;align-items:center;gap:12px}
+.resume>div{flex:1;min-width:0}
+.resume .btn{background:var(--sun-ink);color:var(--sun);width:auto;min-height:46px;flex:none}
 .foot{font-size:13px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.45}
 
 /* quiz */
@@ -95,11 +89,6 @@ input[type=range]{width:100%;height:44px;accent-color:var(--brand);margin:0}
 .meta{font-weight:800;min-width:64px;text-align:right;font-size:15px;white-space:nowrap}
 .chip{display:inline-block;padding:4px 12px;border-radius:99px;background:var(--surface2);font-size:13px;font-weight:700;margin-bottom:12px}
 .qtext{font-family:'Fredoka',sans-serif;font-size:21px;line-height:1.3;font-weight:500;margin:0 0 16px}
-.creature{display:flex;align-items:center;gap:12px;background:var(--warn-bg);border-radius:16px;padding:10px 12px;margin-bottom:14px}
-.creature .cr{font-size:34px;animation:wob 2.2s ease-in-out infinite}
-.creature b{display:block;font-size:14px}
-.creature span{font-size:13px;color:var(--muted)}
-.dots{letter-spacing:3px;color:var(--brand);font-weight:800}
 .opts{display:grid;gap:10px}
 .opt{display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;min-height:56px;padding:13px 14px;border-radius:16px;border:2px solid var(--line);background:var(--surface);font-weight:600;line-height:1.35;transition:border-color .15s,background .15s}
 .opt .mk{flex:none;width:26px;height:26px;border:2px solid var(--line);display:grid;place-items:center;font-size:15px;font-weight:800;margin-top:-1px;background:var(--bg)}
@@ -117,7 +106,6 @@ input[type=range]{width:100%;height:44px;accent-color:var(--brand);margin:0}
 .fb p{margin:4px 0 0}
 .fb .ev{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-weight:700}
 .act{margin-top:16px}
-.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:800;z-index:60;animation:rise .25s ease-out;box-shadow:var(--shadow)}
 
 /* summary */
 .sum{text-align:center;padding:8px 0}
@@ -130,7 +118,6 @@ input[type=range]{width:100%;height:44px;accent-color:var(--brand);margin:0}
 .ringtxt b{font-family:'Fredoka',sans-serif;font-size:46px;line-height:1}
 .ringtxt span{color:var(--muted);font-weight:700}
 .trophy{font-size:56px;animation:bounce .8s cubic-bezier(.3,1.6,.5,1) both}
-.verdict{font-size:30px;margin:6px 0 4px}
 .tag{display:inline-block;background:var(--surface2);border-radius:99px;padding:3px 12px;font-size:13px;font-weight:700;color:var(--muted)}
 .parade{position:relative;height:48px;overflow:hidden;margin:6px 0 2px}
 .parade div{position:absolute;white-space:nowrap;font-size:32px;animation:march 7s linear 1 both}
@@ -158,15 +145,11 @@ summary{cursor:pointer;font-weight:800;padding:8px 0;min-height:44px;display:fle
 .srow{margin:16px 0}
 .srow>b{display:block;margin-bottom:8px}
 
-.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:80}
-.confetti span{position:absolute;top:-8vh;animation:fall linear forwards;will-change:transform}
-
 .hearts{font-size:18px;letter-spacing:2px;white-space:nowrap;min-width:78px}
 .ready{display:flex;gap:14px;align-items:center}
 .ready .big{font-family:'Fredoka',sans-serif;font-size:46px;line-height:1;color:var(--brand)}
 .ready .lab{font-weight:800}
 .meter.big{height:12px}
-.twist{background:var(--surface2);border-radius:16px;padding:8px 12px;margin-bottom:14px;font-weight:700;font-size:14px}
 .nav{display:flex;gap:10px;margin-top:16px}
 .nav .btn{min-height:50px}
 .flagbtn{min-height:44px;padding:8px 14px;border-radius:14px;background:var(--surface2);font-weight:800}
@@ -178,19 +161,60 @@ summary{cursor:pointer;font-weight:800;padding:8px 0;min-height:44px;display:fle
 .gq.f::after{content:"🚩";position:absolute;top:-7px;right:-5px;font-size:12px}
 .cheat li{margin:6px 0}
 .qtext b{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
-.mini{width:40px;height:40px;border-radius:12px;background:var(--surface2);font-size:18px;display:grid;place-items:center;flex:none}
+/* home, progress, pages */
+.seg button[disabled]{opacity:.55;cursor:default}
+.seg small{font-weight:700;opacity:.85;margin-left:2px}
+.lv{margin-bottom:14px}
+.lv button{min-height:46px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+.chev{color:var(--muted);font-size:22px;line-height:1;flex:none}
+.rd{display:block;width:100%;text-align:left}
+.rdh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.rdh h2{flex:1;margin:0}
+.rdh b{font-family:'Fredoka',sans-serif;font-size:24px;line-height:1;color:var(--brand)}
+.rd .small{display:block;margin-top:8px}
+button.trow{width:100%;text-align:left}
+.tl{display:flex;align-items:center;gap:8px;margin-top:5px}
+.tl .meter{flex:1;margin:0}
+.tl small{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;min-width:84px;text-align:right}
+.tl small.w{color:var(--warn)}.tl small.g{color:var(--good)}
+.qmeta{display:flex;justify-content:space-between;gap:10px;margin:0 2px 10px}
+.hearts .pop{display:inline-block;animation:heart .7s cubic-bezier(.3,1.6,.5,1)}
+.passlab{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}
+.steps{margin:0;padding-left:22px}
+.steps li{margin:6px 0}
+.card h2 .tag{vertical-align:middle;margin-left:6px}
+/* launch */
+#splash{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;pointer-events:none;animation:splashout .25s ease-in .9s forwards}
+#splash svg{width:96px;overflow:visible}
+#splash svg *{transform-box:fill-box;transform-origin:center}
+.sr{fill:none;stroke:var(--good);stroke-width:11;animation:sring .9s ease-out both}
+.sd{fill:var(--sun);animation:sdrop .9s cubic-bezier(.5,0,.8,.6) both}
+@keyframes sdrop{0%{transform:translateY(-330%);opacity:0}10%{opacity:1}52%{transform:translateY(0)}66%{transform:translateY(-28%)}80%,100%{transform:translateY(0)}}
+@keyframes sring{0%,50%{transform:scale(1)}62%{transform:scale(1.09)}78%,100%{transform:scale(1)}}
+@keyframes splashout{to{opacity:0;visibility:hidden}}
+@keyframes heart{0%{transform:scale(.3)}60%{transform:scale(1.5)}100%{transform:scale(1)}}
+@media (max-width:480px){
+  #app{padding:0 14px 32px}
+  .card{padding:16px;border-radius:20px}
+  .top h1{font-size:20px}
+  .qtext{font-size:19px}
+  .ringwrap{width:176px;height:176px}
+  .ringtxt b{font-size:40px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes wob{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
 @keyframes bounce{0%{transform:scale(0) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
-@keyframes fall{to{transform:translate3d(var(--dx),115vh,0) rotate(var(--rot))}}
 @keyframes march{from{left:-100%}to{left:100%}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .parade div{position:static}
+  #splash{display:none}
 }
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><svg viewBox="0 0 100 100"><circle class="sr" cx="50" cy="50" r="30"/><circle class="sd" cx="50" cy="50" r="11"/></svg></div>
 <div id="app"></div>
 <script>
 (()=>{
@@ -480,20 +504,13 @@ const CHEAT=[
  ['Empiricism: knowledge comes from experience. Pillars: transparency, inspection, adaptation.','Lean thinking: reduce waste and focus on the essentials.','Values: Commitment, Focus, Openness, Respect, Courage.','Scrum is a lightweight, purposefully incomplete framework for complex problems.']
 ];
 const STAGES=['🥚','🐣','🐥','🦖'];
-const TAUNTS=[
- ['Back again! Missed me? 😏','Round two. Ready?','I’m baaack!'],
- ['I grew a little. Can you still catch me?','Third time’s the charm?'],
- ['I’m getting big… 😼','You’re closer than you think.'],
- ['ROAR! Last chance to tame me 🦖','The big boss returns!']
-];
-
 /* ---------- state ---------- */
 const freshProg=()=>({q:{},th:{},best:0,xp:0,ex:[],day:{d:'',n:0},ds:0,dl:''});
 let prog=Object.assign(freshProg(),store.get(K.prog,{}));
 let settings=Object.assign({pass:85,sound:true,theme:'auto',count:10},store.get(K.set,{}));
 let round=store.get(K.round,null);
 if(round&&(!Array.isArray(round.log)||!round.mode||(round.mode==='exam'&&!round.ans)||(round.mode!=='exam'&&round.lives==null)))round=null;
-let summary=null,view='home',showSettings=false,showOver=false,cheat=null,resetArm=false,timer=null,ringAnim=false;
+let summary=null,view='home',showSettings=false,showOver=false,cheat=null,resetArm=false,timer=null,ringAnim=false,deferred=null;
 
 const save=()=>{store.set(K.prog,prog);store.set(K.set,settings);if(round)store.set(K.round,round);else store.del(K.round)};
 const qp=id=>prog.q[id]||(prog.q[id]={box:0,streak:0,misses:0,tries:0,seen:0,won:false});
@@ -535,7 +552,6 @@ function readiness(){
   const ready=score>=85&&mn>=0.75;
   return {score,ready,u,label:ready?'Ready for exam mode 🚀':score>=65?'Getting close 🌤️':'Not yet 🌱',weak:wk?wk.t:null,fresh:ss.filter(x=>x.n<10).length};
 }
-document.documentElement.removeAttribute('data-theme');
 function applyTheme(){const r=document.documentElement;if(settings.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme)}
 applyTheme();
 
@@ -585,11 +601,10 @@ function present(){
   const r=round;
   const id=pickNext(r);
   if(id==null){finish();return}
-  const q=Q[id],p=qp(id);
+  const q=Q[id];qp(id);
   const n=optsOf(q).length;
   const order=q[1]==='t'?[0,1]:shuffle([...Array(n).keys()]);
-  const had=p.misses>0&&p.streak<2;
-  r.cur={id,order,sel:[],done:false,ok:null,ev:null,had,twist:!!r.tw[id],taunt:had?pick1(TAUNTS[Math.min(3,p.misses-1)]):''};
+  r.cur={id,order,sel:[],done:false,ok:null,ev:null};
   if(!r.asked.includes(id))r.asked.push(id);
   save();render();window.scrollTo(0,0);
 }
@@ -626,13 +641,8 @@ function record(){
   prog.th[t]=((prog.th[t]||[]).concat(ok?1:0)).slice(-15);
   r.log.push({id:c.id,t,ok,sel:c.sel.slice()});
   c.ev=ev;c.over=r.lives<=0;
-  const goal=bumpDay(1);
-  if(ok){
-    beep([[660,0,.12],[880,.1,.16]]);haptic(15);
-    if(c.life)toast('❤️ Life won back!');
-    else if(goal)toast('📅 Daily goal reached!');
-    else if(r.streak>=3&&r.streak%3===0)toast('🔥 '+r.streak+' in a row!');
-  }else beep([[330,0,.2]]);
+  if(bumpDay(1))r.goal=true;
+  if(ok){beep([[660,0,.12],[880,.1,.16]]);haptic(15)}else beep([[330,0,.2]]);
   save();
 }
 function submitExam(){
@@ -649,13 +659,13 @@ function submitExam(){
   });
   const c=r.log.filter(l=>l.ok).length;
   prog.ex=(prog.ex||[]).concat({p:Math.round(c/r.log.length*100),d:today()}).slice(-5);
-  prog.xp+=c*5;bumpDay(answered);
-  finishWith({mode:'exam',exam:true,log:r.log.slice(),best:0,conq:0,over:false,lucky:0,solid:0});
+  prog.xp+=c*5;const goal=bumpDay(answered);
+  finishWith({mode:'exam',exam:true,log:r.log.slice(),best:0,conq:0,over:false,lucky:0,solid:0,goal});
 }
 function finish(over){
   const r=round;if(!r)return;
   stopTimer();
-  finishWith({mode:r.mode,exam:false,log:r.log.slice(),best:r.best,conq:r.conq,over:!!over,lucky:r.lucky,solid:r.solid});
+  finishWith({mode:r.mode,exam:false,log:r.log.slice(),best:r.best,conq:r.conq,over:!!over,lucky:r.lucky,solid:r.solid,goal:!!r.goal});
 }
 function finishWith(S){
   summary=S;round=null;view='summary';showOver=false;ringAnim=true;
@@ -696,24 +706,6 @@ function beep(seq){
   }catch(e){}
 }
 function haptic(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
-function toast(t){
-  const old=$('.toast');if(old)old.remove();
-  const d=document.createElement('div');d.className='toast';d.textContent=t;d.setAttribute('role','status');
-  document.body.appendChild(d);setTimeout(()=>d.remove(),1700);
-}
-function confetti(emojis,count){
-  if(reduce)return;
-  const box=document.createElement('div');box.className='confetti';box.setAttribute('aria-hidden','true');
-  for(let i=0;i<count;i++){
-    const s=document.createElement('span');
-    s.textContent=pick1(emojis);
-    const dur=2.6+Math.random()*2.4;
-    s.style.cssText='left:'+(Math.random()*100)+'%;font-size:'+(18+Math.random()*22)+'px;animation-duration:'+dur+'s;animation-delay:'+(Math.random()*1.4)+'s;--dx:'+((Math.random()-.5)*160)+'px;--rot:'+((Math.random()-.5)*720)+'deg';
-    box.appendChild(s);
-  }
-  document.body.appendChild(box);
-  setTimeout(()=>box.remove(),7500);
-}
 function calc(){
   const S=summary,total=S.log.length,correct=S.log.filter(l=>l.ok).length;
   const pct=total?Math.round(correct/total*100):0;
@@ -726,62 +718,65 @@ function calc(){
 function celebrate(){
   const C=calc();
   if(C.tier==='not'||summary.over)return;
-  if(C.tier==='close'){confetti(['✨','💪','⭐'],26);haptic(30);return}
+  if(C.tier==='close'){haptic(30);return}
   haptic([80,40,80,40,160]);
   beep([[523,0,.18],[659,.16,.18],[784,.32,.18],[1047,.5,.4]]);
-  confetti(C.tier==='perfect'?['🎉','🥳','✨','🏆','🎊','👑']:['🎉','🥳','✨','🏆','🎊'],C.tier==='perfect'?120:80);
 }
 
 /* ---------- views ---------- */
-function topbar(title,right){return '<header class="top"><h1>'+title+'</h1>'+(right||'')+'</header>'}
-const hearts=n=>'❤️'.repeat(Math.max(0,n))+'🖤'.repeat(Math.max(0,MAXL-n));
+const header=(title,left,right)=>'<header class="top">'+(left||'')+'<h1>'+title+'</h1>'+(right||'')+'</header>';
+const backBtn='<button class="iconbtn" data-a="home" aria-label="Back">←</button>';
+const hearts=(n,pop)=>{let h='';for(let i=0;i<MAXL;i++)h+='<span'+(pop&&i===n-1?' class="pop"':'')+'>'+(i<n?'❤️':'🖤')+'</span>';return h};
+const installed=()=>!!((window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone);
 
 function homeView(){
-  const lvl=Math.floor(prog.xp/150)+1;
   const weakOK=!!weakestThemes(3);
   const mins=Math.max(1,Math.round(settings.count*0.3));
   const R=readiness();
-  const dn=prog.day.d===today()?prog.day.n:0;
-  let h=topbar('PSPO Practice Arena','<button class="iconbtn" data-a="settings" aria-label="Settings">⚙️</button>');
-  h+='<div class="hero"><h2>Tame the tough questions 🦖</h2><p>Quick rounds, friendly feedback. Missed questions keep coming back, and every idea is tested twice in different words.</p></div>';
+  let h=header('PSPO Training','','<button class="iconbtn" data-a="progress" aria-label="Progress">📊</button><button class="iconbtn" data-a="settings" aria-label="Settings">⚙️</button>');
   if(round){
     const examAns=round.mode==='exam'?round.order.filter((_,i)=>(round.ans[i]||[]).length).length:0;
-    const label=round.mode==='exam'?'Exam: '+examAns+' of 80 answered':(round.mode==='weak'?'Weak-themes round':'Round')+', question '+Math.min(round.log.length+1,round.total)+' of '+round.total;
-    h+='<div class="card resume"><h2>Pick up where you left off</h2><div>'+esc(label)+'</div><button class="btn" data-a="resume">Resume</button></div>';
+    const label=round.mode==='exam'?'Exam · '+examAns+' of 80 answered':'Question '+Math.min(round.log.length+1,round.total)+' of '+round.total;
+    h+='<div class="card resume"><div><b>Round in progress</b><div class="small">'+label+'</div></div><button class="btn" data-a="resume">Resume</button></div>';
   }
+  h+='<div class="seg lv" role="group" aria-label="Level"><button aria-pressed="true" data-a="noop">PSPO I</button><button disabled>PSPO II <small>soon</small></button></div>';
+  h+='<div class="card"><div class="sliderbox"><h2 style="margin:0"><label for="cnt">Questions per round</label></h2><b id="cntv">'+settings.count+'</b></div>'+
+     '<input type="range" id="cnt" min="5" max="40" step="1" value="'+settings.count+'">'+
+     '<div class="muted small" id="cntm" style="margin:0 0 12px">About '+mins+' min</div>'+
+     '<button class="btn" data-a="start">Start round</button>'+
+     '<div class="row" style="margin-top:10px">'+(weakOK?'<button class="btn alt" data-a="weak">Weak themes</button>':'')+'<button class="btn '+(R&&R.ready?'sun':'alt')+'" data-a="exam">Exam mode</button></div></div>';
+  h+='<button class="card rd" data-a="progress"><span class="rdh"><h2>Exam readiness</h2>'+(R?'<b>'+R.score+'%</b>':'')+'<span class="chev" aria-hidden="true">›</span></span><span class="meter big"><i style="width:'+(R?R.score:0)+'%"></i></span><span class="muted small">'+(R?R.label:'Shows after 15 answers')+'</span></button>';
+  return h;
+}
+
+function progressView(){
+  const lvl=Math.floor(prog.xp/150)+1;
+  const R=readiness();
+  const dn=prog.day.d===today()?prog.day.n:0;
+  let h=header('Progress',backBtn);
   h+='<div class="card"><h2>Exam readiness</h2>';
   if(R){
-    const hint=R.ready?'Consistent on every theme. Time to try exam mode!':(R.fresh>0?'Only '+(THEMES.length-R.fresh)+' of '+THEMES.length+' themes have enough practice so far (about 10 answers each). Less practice only counts partly.':(R.weak!=null?'Next up: '+THEMES[R.weak].e+' '+esc(THEMES[R.weak].n):'Keep practicing across all themes.'));
-    h+='<div class="ready"><div class="big">'+R.score+'%</div><div style="flex:1"><div class="lab">'+R.label+'</div><div class="meter big"><i style="width:'+R.score+'%"></i></div></div></div><div class="muted small" style="margin-top:8px">'+hint+'</div>';
+    const hint=R.ready?'Time to try exam mode.':R.fresh>0?'Practise all '+THEMES.length+' themes for a full score.':R.weak!=null?'Next up: '+THEMES[R.weak].e+' '+esc(THEMES[R.weak].n):'';
+    h+='<div class="ready"><div class="big">'+R.score+'%</div><div style="flex:1"><div class="lab">'+R.label+'</div><div class="meter big"><i style="width:'+R.score+'%"></i></div></div></div>';
+    if(hint)h+='<div class="muted small" style="margin-top:8px">'+hint+'</div>';
     if(prog.ex.length)h+='<div class="muted small">Last exam: '+prog.ex[prog.ex.length-1].p+'% · best '+Math.max(...prog.ex.map(x=>x.p))+'%</div>';
-  }else h+='<div class="muted">Answer a few questions and your readiness score shows up here.</div>';
+  }else h+='<div class="muted">Shows after 15 answers.</div>';
   h+='</div>';
-  h+='<div class="card"><h2>Level</h2><div class="levels">'+
-     '<button class="lvl" aria-pressed="true" data-a="noop">PSPO I</button>'+
-     '<button class="lvl" disabled>PSPO II <small>soon</small></button>'+
-     '<button class="lvl" disabled>PSPO III <small>soon</small></button></div></div>';
-  h+='<div class="card"><div class="sliderbox"><h2 style="margin:0">Questions per round</h2><b id="cntv">'+settings.count+'</b></div>'+
-     '<input type="range" id="cnt" min="5" max="40" step="1" value="'+settings.count+'" aria-label="Questions per round">'+
-     '<div class="muted small" id="cntm" style="margin:2px 0 14px">About '+mins+' min · 3 ❤️ per round</div>'+
-     '<button class="btn" data-a="start">Start round 🚀</button>'+
-     '<div class="row" style="margin-top:10px"><button class="btn alt" data-a="weak"'+(weakOK?'':' disabled')+'>Weak themes 🔥</button><button class="btn '+(R&&R.ready?'sun':'alt')+'" data-a="exam">Exam mode ⏱️</button></div>'+
-     '<div class="muted small" style="margin-top:10px">A wrong answer costs a ❤️. Out of lives? Start the round again. A 5-streak wins one back. Exam mode: 80 questions, 60 minutes, no lives and no feedback until you submit.</div></div>';
-  h+='<div class="stats"><div class="stat"><b>'+prog.xp+'</b><span>XP · lvl '+lvl+'</span></div><div class="stat"><b>🔥 '+prog.best+'</b><span>best streak</span></div><div class="stat"><b>'+understood()+'/'+HALF+'</b><span>ideas understood</span></div><div class="stat"><b>📅 '+dayStreak()+'</b><span>today '+Math.min(dn,GOAL)+'/'+GOAL+'</span></div></div>';
+  h+='<div class="stats"><div class="stat"><b>'+prog.xp+'</b><span>XP · level '+lvl+'</span></div><div class="stat"><b>🔥 '+prog.best+'</b><span>best streak</span></div><div class="stat"><b>'+understood()+'/'+HALF+'</b><span>ideas understood</span></div><div class="stat"><b>📅 '+Math.min(dn,GOAL)+'/'+GOAL+'</b><span>today · '+dayStreak()+' day streak</span></div></div>';
   h+='<div class="card"><h2>Your themes</h2>';
   THEMES.forEach((T,t)=>{
     const ids=Q.map((_,i)=>i).filter(i=>Q[i][0]===t);
     const m=ids.filter(i=>prog.q[i]&&prog.q[i].streak>=2).length;
     const n=(prog.th[t]||[]).length,s=strength(t);
-    const heat=n<3?'✨':s<.5?'🔥':s<.75?'🌤️':'🌱';
-    h+='<div class="trow"><div class="em">'+T.e+'</div><div class="nm">'+esc(T.n)+'<div class="meter"><i style="width:'+Math.round(m/ids.length*100)+'%"></i></div></div><button class="mini" data-a="cheat" data-t="'+t+'" aria-label="Cheat sheet: '+esc(T.n)+'">📝</button><div class="heat">'+heat+'</div></div>';
+    const lab=n<3?['','New']:s<.5?['w','Needs work']:s<.75?['','Getting there']:['g','Solid'];
+    h+='<button class="trow" data-a="cheat" data-t="'+t+'" aria-label="'+esc(T.n)+', '+lab[1]+'. Open key points"><span class="em" aria-hidden="true">'+T.e+'</span><span class="nm">'+esc(T.n)+'<span class="tl"><span class="meter"><i style="width:'+Math.round(m/ids.length*100)+'%"></i></span><small class="'+lab[0]+'">'+lab[1]+'</small></span></span><span class="chev" aria-hidden="true">›</span></button>';
   });
-  h+='<div class="muted small" style="margin-top:8px">🔥 needs work · 🌤️ getting there · 🌱 solid · ✨ new. Bars show mastered questions. Tap 📝 for a quick cheat sheet.</div></div>';
+  h+='</div>';
   const shelf=THEMES.map((T,t)=>{
     const ids=Q.map((_,i)=>i).filter(i=>Q[i][0]===t&&prog.q[i]&&prog.q[i].won);
     return ids.length?'<div class="trow"><div class="em">'+T.e+'</div><div class="nm">'+esc(T.n)+'</div><div class="shelf">'+ids.slice(0,10).map(i=>stageOf(prog.q[i])).join('')+'</div></div>':'';
   }).join('');
-  h+='<div class="card"><h2>Trophy shelf 🏆</h2>'+(shelf||'<div class="muted">Answer a stubborn question correctly twice in a row to defeat it and add it here.</div>')+'</div>';
-  h+='<div class="foot">Original practice questions, not official Scrum.org assessment questions. Themes follow The Professional Product Owner and the Scrum Guide. Progress is saved in this browser only.</div>';
+  if(shelf)h+='<div class="card"><h2>Trophy shelf 🏆</h2>'+shelf+'</div>';
   return h;
 }
 
@@ -799,33 +794,24 @@ function optionsHtml(q,order,sel,done,feedback){
 }
 
 function quizView(){
-  const r=round,c=r.cur,q=Q[c.id],T=THEMES[q[0]],p=qp(c.id);
+  const r=round,c=r.cur,q=Q[c.id],T=THEMES[q[0]];
   const multi=q[1]==='m',done=c.done;
   const pos=Math.min(r.log.length+(done?0:1),r.total);
-  let h='<header class="top"><button class="iconbtn" data-a="home" aria-label="Back to home">✕</button><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+r.total+'" aria-valuenow="'+r.log.length+'"><i style="width:'+Math.round(r.log.length/r.total*100)+'%"></i></div><div class="meta hearts" aria-label="'+r.lives+' lives left">'+hearts(r.lives)+'</div></header>';
-  h+='<div class="muted small" style="margin:0 2px 10px">Question '+pos+' of '+r.total+' · 🔥 '+r.streak+'</div>';
-  h+='<div class="card"><span class="chip">'+T.e+' '+esc(T.n)+'</span>';
-  if(c.twist)h+='<div class="twist">🔁 Twist: same idea as an earlier question, new wording. Do you really get it?</div>';
-  if(c.had){
-    const dots=Math.min(2,p.streak);
-    h+='<div class="creature"><div class="cr" aria-hidden="true">'+stageOf(p)+'</div><div><b>Stubborn question</b><span>'+esc(c.taunt)+'</span><div class="dots" aria-label="'+dots+' of 2 correct in a row">'+'●'.repeat(dots)+'○'.repeat(2-dots)+'</div></div></div>';
-  }
-  h+='<p class="qtext">'+qhtml(q[2])+'</p><div class="opts">'+optionsHtml(q,c.order,c.sel,done,true)+'</div>';
+  const toLife=r.lives<MAXL;
+  const streak=toLife?'<span aria-label="'+(r.streak%5)+' of 5 correct in a row to win back a life">🔥 '+(r.streak%5)+'/5 → ❤️</span>':r.streak>=2?'<span aria-label="'+r.streak+' correct in a row">🔥 '+r.streak+'</span>':'';
+  let h='<header class="top"><button class="iconbtn" data-a="home" aria-label="Back to home">✕</button><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+r.total+'" aria-valuenow="'+r.log.length+'"><i style="width:'+Math.round(r.log.length/r.total*100)+'%"></i></div><div class="meta hearts" aria-label="'+r.lives+' lives left">'+hearts(r.lives,done&&c.life)+'</div></header>';
+  h+='<div class="qmeta muted small"><span>Question '+pos+' of '+r.total+'</span>'+streak+'</div>';
+  h+='<div class="card"><p class="qtext">'+qhtml(q[2])+'</p><div class="opts">'+optionsHtml(q,c.order,c.sel,done,true)+'</div>';
   if(done){
     const ev=c.ev,L=[];
-    if(ev){
-      if(ev.k==='appear')L.push('A stubborn question hatched 🥚 Its twin pops up soon in new wording, and it returns in later rounds. Totally normal!');
-      else if(ev.k==='evolve')L.push('It evolved '+ev.from+' → '+ev.to+'. It keeps coming back, in new wording first, until you get it right twice in a row.');
-      else if(ev.k==='progress')L.push('One more correct answer in a row to defeat it. ●○');
-      else if(ev.k==='defeated')L.push('Defeated! 💥 Got it after '+ev.tries+' tries. Added to your trophy shelf 🏆');
-    }
-    if(c.tw==='solid')L.push('Understood from both angles ✨ You nailed the same idea in different words.');
-    else if(c.tw==='lucky')L.push('This is the same idea as one you got right before, so that one may have been a lucky guess 🍀 Worth a closer look!');
+    if(ev&&ev.k==='progress')L.push('One more in a row to master it ●○');
+    else if(ev&&ev.k==='defeated')L.push('Mastered ⭐');
+    if(c.tw==='solid')L.push('Understood from both angles ✨');
+    else if(c.tw==='lucky')L.push('You got this idea right before, in other words. Worth a closer look 🍀');
     else if(c.tw==='both')L.push('Now you’ve got it from both angles 🎯');
-    if(c.life)L.push('❤️ Life won back with a 5-streak!');
-    if(c.over)L.push('Out of lives 💔 Let’s see what to focus on.');
-    h+='<div class="fb '+(c.ok?'good':'warn')+'" role="status"><h3>'+(c.ok?pick1(['Nice one! 🎯','Spot on! ✨','Correct! 🔥']):'Here’s the catch 🪝')+'</h3><p>'+esc(q[5])+'</p>'+(L.length?'<div class="ev">'+L.join('<br>')+'</div>':'')+'</div>';
-    h+='<div class="act"><button class="btn" data-a="cont">'+(c.over?'See results':r.log.length>=r.total?'See results 🏁':'Continue')+'</button></div>';
+    if(c.over)L.push('Out of lives 💔');
+    h+='<div class="fb '+(c.ok?'good':'warn')+'" role="status"><h3>'+(c.ok?'Correct ✅':'Not quite')+'</h3><p>'+esc(q[5])+'</p>'+(L.length?'<div class="ev">'+L.join('<br>')+'</div>':'')+'<div class="muted small" style="margin-top:10px">'+T.e+' '+esc(T.n)+'</div></div>';
+    h+='<div class="act"><button class="btn" data-a="cont">'+(c.over||r.log.length>=r.total?'See results':'Continue')+'</button></div>';
   }else if(multi){
     h+='<div class="act"><button class="btn" data-a="check"'+(c.sel.length?'':' disabled')+'>Check answer</button></div>';
   }
@@ -864,7 +850,7 @@ function overviewSheet(){
 }
 function cheatSheet(){
   const T=THEMES[cheat];
-  return '<div class="scrim" data-a="scrim"><div class="panel cheat" role="dialog" aria-label="Cheat sheet"><div class="row" style="align-items:center"><h2>'+T.e+' '+esc(T.n)+'</h2><button class="iconbtn" data-a="close" aria-label="Close" style="flex:none;margin-left:auto">✕</button></div><ul style="padding-left:20px;margin:12px 0">'+CHEAT[cheat].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="muted small">Go deeper: '+esc(T.r)+'</div></div></div>';
+  return '<div class="scrim" data-a="scrim"><div class="panel cheat" role="dialog" aria-label="Key points"><div class="row" style="align-items:center"><h2>'+T.e+' '+esc(T.n)+'</h2><button class="iconbtn" data-a="close" aria-label="Close" style="flex:none;margin-left:auto">✕</button></div><ul style="padding-left:20px;margin:12px 0">'+CHEAT[cheat].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="muted small">Go deeper: '+esc(T.r)+'</div></div></div>';
 }
 
 function summaryView(){
@@ -873,40 +859,28 @@ function summaryView(){
   const circ=2*Math.PI*54;
   const ang=PASS/100*2*Math.PI-Math.PI/2;
   const x1=70+46*Math.cos(ang),y1=70+46*Math.sin(ang),x2=70+64*Math.cos(ang),y2=70+64*Math.sin(ang);
-  const need=Math.ceil(PASS*80/100);
-  const head=over?'Out of lives 💔':{perfect:'Flawless! 👑',pass:'You passed! 🎓',close:'So close! 💪',not:'Keep going, you’re getting there 🌱'}[tier];
-  let sub;
-  if(over)sub='You made it through '+total+' question'+(total===1?'':'s')+'. Missed ones come back until they stick, so go again!';
-  else if(tier==='perfect'||tier==='pass')sub='That clears the '+PASS+'% pass line.';
-  else sub=(PASS-pct)+'% to go to reach the '+PASS+'% pass line.';
-  const label=S.exam?'Exam result':over?'Round over':'Round result';
-  const note=S.exam?'The real exam needs about '+need+' of 80 correct ('+PASS+'%).':'Short rounds are a guide. The real pass or fail check is exam mode with 80 questions.';
-  let h=topbar('Results','<button class="iconbtn" data-a="home" aria-label="Home">🏠</button>');
-  h+='<div class="card sum"><span class="tag">'+label+'</span>';
-  if(!over&&(tier==='perfect'||tier==='pass'))h+='<div class="trophy" aria-hidden="true">🏆</div>';
-  h+='<div class="ringwrap"><svg class="ring" viewBox="0 0 140 140" role="img" aria-label="'+pct+' percent, pass line '+PASS+' percent"><circle class="trk" cx="70" cy="70" r="54"/><circle class="prg" id="ringp" cx="70" cy="70" r="54" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'" transform="rotate(-90 70 70)"/><line class="pass" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/></svg><div class="ringtxt"><b>'+pct+'%</b><span>'+correct+' / '+total+'</span></div></div>';
-  h+='<h2 class="verdict">'+head+'</h2><div>'+sub+'</div><div class="muted small" style="margin-top:6px">The yellow tick on the ring marks the pass line. '+note+'</div>';
+  const lx=(70+88*Math.cos(ang))/1.4,ly=(70+80*Math.sin(ang))/1.4;
+  const head=over?'Out of lives 💔':{perfect:'Flawless! 👑',pass:'You passed! 🎓',close:'So close! 💪',not:'Keep going 🌱'}[tier];
+  const passed=!over&&(tier==='perfect'||tier==='pass');
+  let h='<header class="top"><button class="iconbtn" data-a="home" aria-label="Back to home">✕</button><h1>'+head+'</h1></header>';
+  h+='<div class="card sum">';
+  if(passed)h+='<div class="trophy" aria-hidden="true">🏆</div>';
+  h+='<div class="ringwrap"><svg class="ring" viewBox="0 0 140 140" role="img" aria-label="'+pct+' percent, '+correct+' of '+total+' correct. Pass mark '+PASS+' percent"><circle class="trk" cx="70" cy="70" r="54"/><circle class="prg" id="ringp" cx="70" cy="70" r="54" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'" transform="rotate(-90 70 70)"/><line class="pass" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/></svg><div class="ringtxt"><b>'+pct+'%</b><span>'+correct+' / '+total+'</span></div><span class="passlab" aria-hidden="true" style="left:'+lx.toFixed(1)+'%;top:'+ly.toFixed(1)+'%">'+PASS+'% pass</span></div>';
   const won=[];Object.keys(prog.q).forEach(i=>{if(prog.q[i].won)won.push(stageOf(prog.q[i]))});
-  if(!over&&(tier==='pass'||tier==='perfect')&&won.length)h+='<div class="parade" aria-label="Your defeated creatures cheer"><div>'+won.slice(0,8).join(' ')+' 📣</div></div>';
-  if(S.solid||S.lucky)h+='<div class="small" style="margin-top:10px">🎯 Understood from both angles: <b>'+(S.solid||0)+'</b> · 🍀 Possible lucky guesses: <b>'+(S.lucky||0)+'</b></div>';
-  h+='<div class="row" style="margin-top:12px"><div class="stat"><b>🔥 '+S.best+'</b><span>best streak</span></div><div class="stat"><b>💥 '+S.conq+'</b><span>defeated</span></div></div></div>';
-
+  if(passed&&won.length)h+='<div class="parade" aria-hidden="true"><div>'+won.slice(0,8).join(' ')+' 📣</div></div>';
+  if(S.goal)h+='<div class="small" style="margin-top:6px;font-weight:700">📅 Daily goal done</div>';
+  if(!S.exam)h+='<div class="row" style="margin-top:12px"><div class="stat"><b>🔥 '+S.best+'</b><span>best streak</span></div><div class="stat"><b>⭐ '+S.conq+'</b><span>mastered</span></div></div>';
   const enough=C.th.filter(t=>t.n>=3).sort((a,b)=>a.pct-b.pct);
-  const few=C.th.filter(t=>t.n<3);
-  h+='<div class="card"><h2>Score by theme</h2>';
-  enough.forEach(t=>{
-    h+='<div class="brow"><div class="hd"><span>'+THEMES[t.t].e+' '+esc(THEMES[t.t].n)+'</span><span>'+t.pct+'% <span class="muted">('+t.c+'/'+t.n+')</span></span></div><div class="pbar"><i class="'+(t.pct>=PASS?'p':'')+'" style="width:'+t.pct+'%"></i><u style="left:calc('+PASS+'% - 1px)"></u></div></div>';
-  });
-  if(!enough.length)h+='<div class="muted">Not enough answers per theme yet. Try a longer round to see theme percentages.</div>';
-  if(few.length)h+='<div class="muted small" style="margin-top:10px">Not enough data yet: '+few.map(t=>THEMES[t.t].e+' '+esc(THEMES[t.t].n)).join(', ')+'.</div>';
-  h+='</div>';
+  const weakOK=enough.some(t=>t.pct<PASS)||!!weakestThemes(3);
+  h+='<div class="row" style="margin-top:14px"><button class="btn" data-a="'+(S.exam?'exam':'start')+'">'+(S.exam?'Another exam':'Play again')+'</button>'+(weakOK?'<button class="btn alt" data-a="weakend">Weak themes</button>':'')+'</div></div>';
 
-  const weak=enough.filter(t=>t.pct<PASS).slice(0,3);
-  h+='<div class="card focus"><h2>Focus on these 🎯</h2>';
-  if(weak.length){
-    h+='<ul class="plain">'+weak.map(t=>'<li><b>'+THEMES[t.t].e+' '+esc(THEMES[t.t].n)+'</b> · '+t.pct+'%<div class="muted small">Reread: '+esc(THEMES[t.t].r)+'</div><button class="flagbtn" style="margin-top:6px" data-a="cheat" data-t="'+t.t+'">📝 Cheat sheet</button></li>').join('')+'</ul><div class="muted small" style="margin-top:8px">These themes will show up more often in your next rounds.</div>';
-  }else h+='<div>Nothing below the pass line in this round 🌱 Keep rotating themes to stay sharp.</div>';
-  h+='</div>';
+  if(enough.length){
+    h+='<div class="card"><h2>Score by theme</h2>';
+    enough.forEach(t=>{
+      h+='<div class="brow"><div class="hd"><span>'+THEMES[t.t].e+' '+esc(THEMES[t.t].n)+'</span><span>'+t.pct+'% <span class="muted">('+t.c+'/'+t.n+')</span></span></div><div class="pbar"><i class="'+(t.pct>=PASS?'p':'')+'" style="width:'+t.pct+'%"></i><u style="left:calc('+PASS+'% - 1px)"></u></div></div>';
+    });
+    h+='</div>';
+  }
 
   const missed=S.log.filter(l=>!l.ok);
   if(missed.length){
@@ -915,23 +889,51 @@ function summaryView(){
       return '<div class="miss-i"><b>'+esc(q[2])+'</b><div>Answer: '+esc(q[4].map(i=>optsOf(q)[i]).join(' / '))+'</div><div class="muted">'+esc(q[5])+'</div></div>';
     }).join('')+'</details></div>';
   }
-  h+='<div class="row"><button class="btn" data-a="weakend">Practice weak themes 🔥</button><button class="btn alt" data-a="'+(S.exam?'exam':'start')+'">'+(S.exam?'Another exam':'Play again')+'</button></div>';
   return h;
 }
 
 function settingsSheet(){
   let h='<div class="scrim" data-a="scrim"><div class="panel" role="dialog" aria-label="Settings"><div class="row" style="align-items:center"><h2>Settings</h2><button class="iconbtn" data-a="close" aria-label="Close" style="flex:none;margin-left:auto">✕</button></div>';
-  h+='<div class="srow"><b>Pass mark</b><div class="seg"><button data-a="pass" data-v="85" aria-pressed="'+(settings.pass===85)+'">85% (PSPO I)</button><button data-a="pass" data-v="80" aria-pressed="'+(settings.pass===80)+'">80%</button></div><div class="muted small" style="margin-top:6px">Check the current official figure on the Scrum.org assessment page.</div></div>';
+  h+='<div class="srow"><b>Pass mark</b><div class="seg"><button data-a="pass" data-v="85" aria-pressed="'+(settings.pass===85)+'">85%</button><button data-a="pass" data-v="80" aria-pressed="'+(settings.pass===80)+'">80%</button></div></div>';
   h+='<div class="srow"><b>Sound</b><div class="seg"><button data-a="sound" data-v="1" aria-pressed="'+settings.sound+'">On</button><button data-a="sound" data-v="0" aria-pressed="'+!settings.sound+'">Muted</button></div></div>';
   h+='<div class="srow"><b>Look</b><div class="seg"><button data-a="theme" data-v="auto" aria-pressed="'+(settings.theme==='auto')+'">Auto</button><button data-a="theme" data-v="light" aria-pressed="'+(settings.theme==='light')+'">Light</button><button data-a="theme" data-v="dark" aria-pressed="'+(settings.theme==='dark')+'">Dark</button></div></div>';
-  h+='<div class="srow"><button class="btn alt" data-a="reset">'+(resetArm?'Tap again to erase all progress':'Reset progress')+'</button></div>';
-  h+='<div class="foot" style="margin-top:0">Original practice questions, not official Scrum.org questions. Confetti turns into a calm trophy screen if your device is set to reduce motion.</div></div></div>';
+  h+='<div class="srow"><button class="btn alt" data-a="how">How it works</button>'+(installed()?'':'<button class="btn alt" data-a="install" style="margin-top:10px">Add to your phone or computer</button>')+'<button class="btn alt" data-a="reset" style="margin-top:10px">'+(resetArm?'Tap again to erase all progress':'Reset progress')+'</button></div>';
+  h+='</div></div>';
+  return h;
+}
+
+function howView(){
+  const li=a=>'<ul class="steps">'+a.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  let h=header('How it works',backBtn);
+  h+='<div class="card"><h2>Rounds</h2>'+li(['A wrong answer costs a ❤️. Lose all three and the round ends.','5 correct in a row wins a ❤️ back.','A question you miss comes back until you get it right twice in a row. Then it is mastered ⭐ and joins your trophy shelf.','Every idea is asked in more than one wording, to check that you understand it.'])+'</div>';
+  h+='<div class="card"><h2>Weak themes</h2>'+li(['A round on the three themes you score lowest on.'])+'</div>';
+  h+='<div class="card"><h2>Exam mode</h2>'+li(['80 questions in 60 minutes, like the real PSPO I exam.','No lives, and no feedback until you submit.','The pass mark is '+settings.pass+'%.'])+'</div>';
+  h+='<div class="card"><h2>Progress</h2>'+li(['Exam readiness combines your recent accuracy across all '+THEMES.length+' themes. It shows after 15 answers.','The daily goal is '+GOAL+' questions.','Progress is saved on this device only.'])+'</div>';
+  h+='<div class="foot">Original practice questions, not official Scrum.org assessment questions. Themes follow The Professional Product Owner and the Scrum Guide.</div>';
+  return h;
+}
+
+function installView(){
+  const ua=navigator.userAgent;
+  const dev=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'desktop';
+  const S={
+    ios:['iPhone or iPad',['Open this page in Safari.','Tap the Share button (the square with an arrow).','Choose “Add to Home Screen”, then tap Add.']],
+    android:['Android',['Open this page in Chrome.','Tap the ⋮ menu.','Choose “Add to Home screen” or “Install app”.']],
+    desktop:['Computer',['Chrome or Edge: click the install icon at the right of the address bar.','Safari on a Mac: choose File, then Add to Dock.']]
+  };
+  let h=header('Add to your device',backBtn);
+  if(installed())h+='<div class="card"><b>Already installed on this device ✓</b></div>';
+  else if(deferred)h+='<button class="btn" data-a="installnow" style="margin-bottom:14px">Install now</button>';
+  [dev].concat(['ios','android','desktop'].filter(k=>k!==dev)).forEach((k,i)=>{
+    h+='<div class="card"><h2>'+S[k][0]+(i===0?' <span class="tag">this device</span>':'')+'</h2><ol class="steps">'+S[k][1].map(x=>'<li>'+x+'</li>').join('')+'</ol></div>';
+  });
+  h+='<div class="foot">Once added, it opens like any other app and works offline.</div>';
   return h;
 }
 
 function render(){
   const app=$('#app');
-  let h=view==='quiz'&&round?(round.mode==='exam'?examView():round.cur?quizView():homeView()):view==='summary'&&summary?summaryView():homeView();
+  let h=view==='quiz'&&round?(round.mode==='exam'?examView():round.cur?quizView():homeView()):view==='summary'&&summary?summaryView():view==='progress'?progressView():view==='how'?howView():view==='install'?installView():homeView();
   if(showSettings)h+=settingsSheet();
   if(showOver&&round&&round.mode==='exam')h+=overviewSheet();
   if(cheat!=null)h+=cheatSheet();
@@ -994,6 +996,8 @@ document.addEventListener('click',e=>{
     case 'submit':if(r&&r.mode==='exam'){showOver=false;submitExam()}break;
     case 'cheat':cheat=+el.dataset.t;render();break;
     case 'settings':showSettings=true;render();break;
+    case 'progress':case 'how':case 'install':showSettings=false;resetArm=false;view=a;render();top();break;
+    case 'installnow':if(deferred){const d=deferred;deferred=null;d.prompt();render()}break;
     case 'close':closeAll();break;
     case 'pass':settings.pass=+el.dataset.v;save();render();break;
     case 'sound':settings.sound=el.dataset.v==='1';save();render();if(settings.sound)beep([[660,0,.1]]);break;
@@ -1008,12 +1012,15 @@ document.addEventListener('input',e=>{
   if(e.target.id==='cnt'){
     settings.count=+e.target.value;
     $('#cntv').textContent=settings.count;
-    $('#cntm').textContent='About '+Math.max(1,Math.round(settings.count*.3))+' min · 3 ❤️ per round';
+    $('#cntm').textContent='About '+Math.max(1,Math.round(settings.count*.3))+' min';
     store.set(K.set,settings);
   }
 });
 
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;if(view==='install')render()});
+window.addEventListener('appinstalled',()=>{deferred=null;if(view==='install')render()});
 render();
+setTimeout(()=>{const sp=$('#splash');if(sp)sp.remove()},1400);
 if(round&&round.mode==='exam'&&round.endsAt<=Date.now()){submitExam()}
 })();
 </script>
