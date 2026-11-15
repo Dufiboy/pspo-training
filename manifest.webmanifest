@@ -1,7 +1,7 @@
 {
   "name": "PSPO Training",
   "short_name": "PSPO",
-  "description": "Practice for the Scrum.org PSPO I exam",
+  "description": "Practice for the Scrum.org PSPO I and PSPO II exams",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
