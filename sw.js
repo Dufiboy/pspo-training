@@ -1,4 +1,4 @@
-const V='pspo-v3';
+const V='pspo-v4';
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon.png'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));
