@@ -13,7 +13,12 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <title>PSPO Training</title>
-<script>try{var t=JSON.parse(localStorage.getItem('pspo1.settings')||'{}').theme;if(t&&t!=='auto')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>
+var PSPO_ACCENTS={mint:{n:'Mint',l:'#0f8a62',d:'#4fe0a8',i:'#ffffff',id:'#13112b'},purple:{n:'Purple',l:'#5340d6',d:'#9a8fff',i:'#ffffff',id:'#13112b'},ocean:{n:'Ocean',l:'#1f6fd1',d:'#6cb4ff',i:'#ffffff',id:'#0b1d33'},coral:{n:'Coral',l:'#d9482b',d:'#ff8a6e',i:'#ffffff',id:'#2a0f08'},sun:{n:'Sunny',l:'#e0a800',d:'#ffd24f',i:'#1c1840',id:'#13112b'}};
+function pspoAccent(){try{var s=JSON.parse(localStorage.getItem('pspo1.settings')||'{}');var t=s.theme||'auto';var dark=t==='dark'||(t==='auto'&&!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches));var a=PSPO_ACCENTS[s.accent]||PSPO_ACCENTS.mint;var st=document.documentElement.style;st.setProperty('--brand',dark?a.d:a.l);st.setProperty('--accent',dark?a.d:a.l);st.setProperty('--brand-ink',dark?a.id:a.i)}catch(e){}}
+try{var t0=JSON.parse(localStorage.getItem('pspo1.settings')||'{}').theme;if(t0&&t0!=='auto')document.documentElement.setAttribute('data-theme',t0)}catch(e){}
+pspoAccent();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -81,7 +86,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .trow .em{font-size:22px;width:30px;text-align:center}
 .trow .nm{flex:1;min-width:0;font-weight:700;font-size:15px;line-height:1.25}
 .meter{display:block;height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:5px}
-.meter i{display:block;height:100%;background:var(--good);border-radius:99px}
+.meter i{display:block;height:100%;background:var(--accent,var(--good));border-radius:99px}
 .heat{font-size:20px;width:28px;text-align:center}
 .shelf{display:flex;flex-wrap:wrap;gap:4px;font-size:24px}
 .resume{background:var(--sun);color:var(--sun-ink);display:flex;align-items:center;gap:12px}
@@ -91,7 +96,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 
 /* quiz */
 .bar{flex:1;height:12px;border-radius:99px;background:var(--surface2);overflow:hidden}
-.bar i{display:block;height:100%;background:var(--good);border-radius:99px;transition:width .35s}
+.bar i{display:block;height:100%;background:var(--accent,var(--good));border-radius:99px;transition:width .35s}
 .meta{font-weight:800;min-width:64px;text-align:right;font-size:15px;white-space:nowrap}
 .chip{display:inline-block;padding:4px 12px;border-radius:99px;background:var(--surface2);font-size:13px;font-weight:700;margin-bottom:12px}
 .qtext{font-family:'Fredoka',sans-serif;font-size:21px;line-height:1.3;font-weight:500;margin:0 0 16px}
@@ -169,6 +174,9 @@ summary{cursor:pointer;font-weight:800;padding:8px 0;min-height:44px;display:fle
 .qtext b{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
 /* home, progress, pages */
 .seg button[disabled]{opacity:.55;cursor:default}
+.swatches{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.sw-btn{width:44px;height:44px;border-radius:50%;background:var(--c);border:0;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35)}
+.sw-btn[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:3px}
 .seg small{font-weight:700;opacity:.85;margin-left:2px}
 .lv{margin-bottom:14px}
 .lv button{min-height:46px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
@@ -200,7 +208,7 @@ button.trow{width:100%;text-align:left}
 #splash{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;pointer-events:none;animation:splashout .25s ease-in .9s forwards}
 #splash svg{width:96px;overflow:visible}
 #splash svg *{transform-box:fill-box;transform-origin:center}
-.sr{fill:none;stroke:var(--good);stroke-width:11;animation:sring .9s ease-out both}
+.sr{fill:none;stroke:var(--accent,var(--good));stroke-width:11;animation:sring .9s ease-out both}
 .sd{fill:var(--sun);animation:sdrop .9s cubic-bezier(.5,0,.8,.6) both}
 @keyframes sdrop{0%{transform:translateY(-330%);opacity:0}10%{opacity:1}52%{transform:translateY(0)}66%{transform:translateY(-28%)}80%,100%{transform:translateY(0)}}
 @keyframes sring{0%,50%{transform:scale(1)}62%{transform:scale(1.09)}78%,100%{transform:scale(1)}}
@@ -782,7 +790,8 @@ function useLevel(l){
 const STAGES=['🥚','🐣','🐥','🦖'];
 /* ---------- state ---------- */
 const freshProg=()=>({q:{},th:{},best:0,xp:0,ex:[],day:{d:'',n:0},ds:0,dl:''});
-let settings=Object.assign({pass:85,sound:true,theme:'auto',count:10,level:1},store.get(K.set,{}));
+let settings=Object.assign({pass:85,sound:true,theme:'auto',count:10,level:1,accent:'mint'},store.get(K.set,{}));
+if(!PSPO_ACCENTS[settings.accent])settings.accent='mint';
 if(!LEVELS[settings.level])settings.level=1;
 let prog,round;
 function loadLevel(){
@@ -835,7 +844,8 @@ function readiness(){
   const ready=score>=85&&mn>=0.75;
   return {score,ready,u,label:ready?'Ready for exam mode 🚀':score>=65?'Getting close 🌤️':'Not yet 🌱',weak:wk?wk.t:null,fresh:ss.filter(x=>x.n<10).length};
 }
-function applyTheme(){const r=document.documentElement;if(settings.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme)}
+function applyTheme(){const r=document.documentElement;if(settings.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);pspoAccent()}
+if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>pspoAccent());
 applyTheme();
 
 /* ---------- selection logic ---------- */
@@ -1185,6 +1195,7 @@ function settingsSheet(){
   h+='<div class="srow"><b>Pass mark</b><div class="seg"><button data-a="pass" data-v="85" aria-pressed="'+(settings.pass===85)+'">85%</button><button data-a="pass" data-v="80" aria-pressed="'+(settings.pass===80)+'">80%</button></div></div>';
   h+='<div class="srow"><b>Sound</b><div class="seg"><button data-a="sound" data-v="1" aria-pressed="'+settings.sound+'">On</button><button data-a="sound" data-v="0" aria-pressed="'+!settings.sound+'">Muted</button></div></div>';
   h+='<div class="srow"><b>Look</b><div class="seg"><button data-a="theme" data-v="auto" aria-pressed="'+(settings.theme==='auto')+'">Auto</button><button data-a="theme" data-v="light" aria-pressed="'+(settings.theme==='light')+'">Light</button><button data-a="theme" data-v="dark" aria-pressed="'+(settings.theme==='dark')+'">Dark</button></div></div>';
+  h+='<div class="srow"><b>Colour</b><div class="swatches" role="group" aria-label="Colour">'+Object.keys(PSPO_ACCENTS).map(k=>'<button class="sw-btn" data-a="accent" data-v="'+k+'" aria-pressed="'+(settings.accent===k)+'" aria-label="'+PSPO_ACCENTS[k].n+'" title="'+PSPO_ACCENTS[k].n+'" style="--c:'+PSPO_ACCENTS[k].l+'"></button>').join('')+'</div><div class="muted small" style="margin-top:6px">'+PSPO_ACCENTS[settings.accent].n+'</div></div>';
   h+='<div class="srow"><button class="btn alt" data-a="how">How it works</button>'+(installed()?'':'<button class="btn alt" data-a="install" style="margin-top:10px">Add to your phone or computer</button>')+'<button class="btn alt" data-a="reset" style="margin-top:10px">'+(resetArm?'Tap again to erase your '+LEVELS[settings.level].name+' progress':'Reset '+LEVELS[settings.level].name+' progress')+'</button></div>';
   h+='</div></div>';
   return h;
@@ -1294,6 +1305,7 @@ document.addEventListener('click',e=>{
     case 'pass':settings.pass=+el.dataset.v;save();render();break;
     case 'sound':settings.sound=el.dataset.v==='1';save();render();if(settings.sound)beep([[660,0,.1]]);break;
     case 'theme':settings.theme=el.dataset.v;applyTheme();save();render();break;
+    case 'accent':settings.accent=el.dataset.v;save();pspoAccent();render();break;
     case 'reset':
       if(!resetArm){resetArm=true;render()}
       else{prog=freshProg();round=null;summary=null;resetArm=false;showSettings=false;view='home';stopTimer();save();render()}
