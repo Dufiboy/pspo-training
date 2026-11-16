@@ -195,6 +195,9 @@ button.trow{width:100%;text-align:left}
 .hearts .pop{display:inline-block;animation:heart .7s cubic-bezier(.3,1.6,.5,1)}
 .passlab{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}
 .steps{margin:0;padding-left:22px}
+.credit{text-align:center;font-size:14px;color:var(--muted);margin-top:22px;line-height:1.8;border-top:1px solid var(--line);padding-top:14px}
+.credit a{color:var(--brand-text,var(--brand));font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.credit a.rel{color:var(--ink);font-size:13px;margin-top:4px;display:inline-block}
 .steps li{margin:6px 0}
 .card h2 .tag{vertical-align:middle;margin-left:6px}
 .more{margin-top:10px;border-top:1px dashed var(--line)}
@@ -1197,6 +1200,7 @@ function settingsSheet(){
   h+='<div class="srow"><b>Look</b><div class="seg"><button data-a="theme" data-v="auto" aria-pressed="'+(settings.theme==='auto')+'">Auto</button><button data-a="theme" data-v="light" aria-pressed="'+(settings.theme==='light')+'">Light</button><button data-a="theme" data-v="dark" aria-pressed="'+(settings.theme==='dark')+'">Dark</button></div></div>';
   h+='<div class="srow"><b>Colour</b><div class="swatches" role="group" aria-label="Colour">'+Object.keys(PSPO_ACCENTS).map(k=>'<button class="sw-btn" data-a="accent" data-v="'+k+'" aria-pressed="'+(settings.accent===k)+'" aria-label="'+PSPO_ACCENTS[k].n+'" title="'+PSPO_ACCENTS[k].n+'" style="--c:'+PSPO_ACCENTS[k].l+'"></button>').join('')+'</div><div class="muted small" style="margin-top:6px">'+PSPO_ACCENTS[settings.accent].n+'</div></div>';
   h+='<div class="srow"><button class="btn alt" data-a="how">How it works</button>'+(installed()?'':'<button class="btn alt" data-a="install" style="margin-top:10px">Add to your phone or computer</button>')+'<button class="btn alt" data-a="reset" style="margin-top:10px">'+(resetArm?'Tap again to erase your '+LEVELS[settings.level].name+' progress':'Reset '+LEVELS[settings.level].name+' progress')+'</button></div>';
+  h+='<div class="credit">Made by <a href="https://www.linkedin.com/in/miguelrijk" target="_blank" rel="noopener">Miguel Rijk</a><br><a class="rel" href="https://github.com/Dufiboy/pspo-training/releases" target="_blank" rel="noopener">See latest release →</a></div>';
   h+='</div></div>';
   return h;
 }
